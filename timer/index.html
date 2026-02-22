@@ -20,6 +20,7 @@
             top: 0; left: 0; width: 100%; height: 100%;
             background: url("image.jpg") center center / cover no-repeat;
             z-index: 1;
+            cursor: pointer;
         }
         .widget {
             position: relative;
@@ -34,6 +35,11 @@
             color: white;
             text-align: center;
             box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            display: none;
+            pointer-events: auto;
+        }
+        .widget.visible {
+            display: block;
         }
         .label {
             text-transform: uppercase;
@@ -98,27 +104,26 @@
         }
         button:active { transform: scale(0.95); background: rgba(255, 255, 255, 0.3); }
         .btn-start { background: white; color: black; font-weight: 700; border: none; }
-        .btn-preset { border-color: rgba(255, 255, 255, 0.5); }
         input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
     </style>
 </head>
 <body>
-    <div class="bg-photo"></div>
-    <div class="widget">
+    <div class="bg-photo" onclick="toggleWidget()"></div>
+    <div class="widget" id="timerWidget">
         <div class="label" id="status">Focus Session</div>
         <div class="time-display">
-            <input type="number" id="min" class="time-input" value="30" min="0" max="99">:
+            <input type="number" id="min" class="time-input" value="60" min="0" max="99">:
             <input type="number" id="sec" class="time-input" value="00" min="0" max="59">
         </div>
         <div class="progress-container">
             <div id="bar" class="progress-bar"></div>
         </div>
         <div class="controls">
-            <button class="btn-preset" onclick="setPreset(30)">30m</button>
             <button class="btn-start" id="startBtn" onclick="toggleTimer()">Start</button>
             <button onclick="resetTimer()">Reset</button>
         </div>
     </div>
+    <audio id="finishSound" src="sound.mp3" preload="auto"></audio>
     <script>
         let timer = null;
         let totalSeconds = 0;
@@ -129,6 +134,13 @@
         const startBtn = document.getElementById('startBtn');
         const progressBar = document.getElementById('bar');
         const statusLabel = document.getElementById('status');
+        const widget = document.getElementById('timerWidget');
+        const sound = document.getElementById('finishSound');
+
+        function toggleWidget() {
+            widget.classList.toggle('visible');
+        }
+
         function updateDisplay(s) {
             const m = Math.floor(s / 60);
             const rS = s % 60;
@@ -137,11 +149,7 @@
             const percent = totalSeconds > 0 ? (s / totalSeconds) * 100 : 100;
             progressBar.style.width = percent + '%';
         }
-        function setPreset(m) {
-            resetTimer();
-            minInput.value = String(m).padStart(2, '0');
-            secInput.value = "00";
-        }
+
         function toggleTimer() {
             if (isRunning) {
                 clearInterval(timer);
@@ -157,19 +165,21 @@
                 }
                 if (remainingSeconds > 0) {
                     isRunning = true;
-                    startBtn.textContent = 'Stop';
+                    startBtn.textContent = 'Pause';
                     statusLabel.textContent = 'Deep Work...';
                     timer = setInterval(() => {
                         remainingSeconds--;
                         updateDisplay(remainingSeconds);
                         if (remainingSeconds <= 0) {
                             clearInterval(timer);
+                            sound.play();
                             resetTimer();
                         }
                     }, 1000);
                 }
             }
         }
+
         function resetTimer() {
             clearInterval(timer);
             isRunning = false;
@@ -178,6 +188,8 @@
             startBtn.textContent = 'Start';
             statusLabel.textContent = 'Focus Session';
             progressBar.style.width = '100%';
+            minInput.value = "60";
+            secInput.value = "00";
         }
     </script>
 </body>
