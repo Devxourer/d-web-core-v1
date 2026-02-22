@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Aesthetic Time Widget</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+    <style>
+        body, html {
+            margin: 0; padding: 0;
+            width: 100%; height: 100%;
+            display: flex; justify-content: center; align-items: center;
+            font-family: "Space Grotesk", sans-serif;
+            background-color: #000;
+            overflow: hidden;
+            user-select: none; -webkit-user-select: none;
+        }
+        .bg-photo {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: url("image.jpg") center center / cover no-repeat;
+            z-index: 1;
+        }
+        .video-container {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 2;
+            pointer-events: none;
+        }
+        .bg-video {
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 102%; height: 102%;
+            object-fit: cover;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            will-change: opacity;
+        }
+        .bg-video.active { opacity: 1; }
+        .widget {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 30px;
+            width: 380px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 1px;
+            -webkit-backdrop-filter: blur(5px);
+            backdrop-filter: blur(5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .day {
+            font-size: 28px; font-weight: 400; text-transform: uppercase;
+            letter-spacing: 4px; margin-bottom: 5px; color: #ffffff;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+        .date {
+            font-size: 16px; font-weight: 300; letter-spacing: 2px;
+            margin-bottom: 10px; color: #f8f8ff;
+        }
+        .time {
+            font-size: 56px; font-weight: 700; letter-spacing: 3px;
+            margin-bottom: 10px; color: #ffffff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        .time span {
+            display: inline-block; cursor: pointer;
+            transition: transform 0.1s;
+        }
+        .time span:active { transform: scale(0.95); }
+        .quote-container {
+            margin-top: 5px; padding: 10px;
+            border-radius: 1px; background: rgba(0, 0, 0, 0.3);
+            color: #ffffff;
+        }
+        .quote {
+            font-size: 18px; font-style: italic; line-height: 1.5;
+        }
+    </style>
+</head>
+<body oncontextmenu="return false;">
+    <div class="bg-photo"></div>
+    <div class="video-container">
+        <video id="vid-hours" class="bg-video" src="video_1.mp4" loop muted playsinline preload="auto"></video>
+        <video id="vid-minutes" class="bg-video" src="video_2.mp4" loop muted playsinline preload="auto"></video>
+        <video id="vid-seconds" class="bg-video" src="video_3.mp4" loop muted playsinline preload="auto"></video>
+    </div>
+    <div class="widget">
+        <div class="day" id="day"></div>
+        <div class="date" id="date">
+            <span id="date-month"></span> 
+            <span id="date-day"></span>, 
+            <span id="date-year"></span>
+        </div>
+        <div class="time">
+            <span id="time-hours">00</span>:<span id="time-minutes">00</span>:<span id="time-seconds">00</span>
+        </div>
+        <div class="quote-container">
+            <div class="quote" id="quote"></div>
+        </div>
+    </div>
+    <script>
+        const quotes = [
+            "The future belongs to those who believe in the beauty of their dreams.",
+            "Strive not to be a success, but rather to be of value.",
+            "Every moment is a fresh beginning.",
+            "Believe you can and you're halfway there.",
+            "The only way to do great work is to love what you do.",
+            "The best way to predict the future is to create it.",
+            "The best preparation for tomorrow is doing your best today.",
+            "The only limit to our realization of tomorrow will be our doubts of today.",
+            "Action is the foundational key to all success.",
+            "Discipline is the bridge between goals and accomplishment."
+        ];
+        function updateTimeAndDate() {
+            const currentDate = new Date();
+            const hours = String(currentDate.getHours()).padStart(2, "0");
+            const minutes = String(currentDate.getMinutes()).padStart(2, "0");
+            const seconds = String(currentDate.getSeconds()).padStart(2, "0");
+            const options = { weekday: "long", month: "long", day: "numeric", year: "numeric" };
+            const fullDate = currentDate.toLocaleDateString("en-US", options);
+            const [weekday, monthDay, year] = fullDate.split(", ");
+            const [month, day] = monthDay.split(" ");
+            document.getElementById("day").textContent = weekday;
+            document.getElementById("date-month").textContent = month;
+            document.getElementById("date-day").textContent = day;
+            document.getElementById("date-year").textContent = year;
+            document.getElementById("time-hours").textContent = hours;
+            document.getElementById("time-minutes").textContent = minutes;
+            document.getElementById("time-seconds").textContent = seconds;
+        }
+        function formatQuote(text) {
+            return text.replace(/,\s+/g, ",<br>").replace(/\s+and\s+/g, "<br>and ");
+        }
+        function setRandomQuote() {
+            const randomIndex = Math.floor(Math.random() * quotes.length);
+            const selectedText = quotes[randomIndex];
+            document.getElementById("quote").innerHTML = formatQuote(selectedText);
+        }
+        updateTimeAndDate();
+        setRandomQuote();
+        setInterval(updateTimeAndDate, 1000);
+        setInterval(setRandomQuote, 60000);
+        const videos = {
+            hours: document.getElementById('vid-hours'),
+            minutes: document.getElementById('vid-minutes'),
+            seconds: document.getElementById('vid-seconds')
+        };
+        let activeVideoKey = null;
+        function toggleVideo(key) {
+            const video = videos[key];
+            if (!video) return;
+            if (activeVideoKey === key) {
+                if (video.paused) {
+                    video.play();
+                    video.classList.add('active');
+                } else {
+                    video.pause();
+                    video.classList.remove('active');
+                }
+            } else {
+                if (activeVideoKey && videos[activeVideoKey]) {
+                    videos[activeVideoKey].pause();
+                    videos[activeVideoKey].classList.remove('active');
+                }
+                activeVideoKey = key;
+                video.play();
+                video.classList.add('active');
+            }
+        }
+        document.getElementById("time-hours").onclick = () => toggleVideo("hours");
+        document.getElementById("time-minutes").onclick = () => toggleVideo("minutes");
+        document.getElementById("time-seconds").onclick = () => toggleVideo("seconds");
+    </script>
+</body>
+</html>
