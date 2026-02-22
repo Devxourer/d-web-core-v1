@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Dashboard Hub</title>
+    <title>Dashboard Hub v4.9</title>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
     <style>
         body, html { margin: 0; padding: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; font-family: "Space Grotesk", sans-serif; background-color: #000; overflow: hidden; user-select: none; -webkit-user-select: none; }
@@ -14,24 +14,25 @@
 
         .widget { position: relative; z-index: 10; width: 400px; min-height: 420px; background: rgba(0, 0, 0, 0.4); -webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px); border-radius: 32px; border: 1px solid rgba(255, 255, 255, 0.1); color: white; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.5); padding: 30px 30px 20px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; }
         
-        .tabs { display: flex; justify-content: center; gap: 35px; margin-bottom: 20px; }
+        .tabs { display: flex; justify-content: center; gap: 40px; margin-bottom: 20px; }
         .tab-icon { cursor: pointer; width: 22px; height: 22px; fill: white; opacity: 0.25; transition: all 0.3s; -webkit-tap-highlight-color: transparent; }
         .tab-icon.active { opacity: 1; filter: drop-shadow(0 0 8px white); }
         .view { display: none; flex-grow: 1; }
         .view.active { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; }
 
-        .day { font-size: 18px; text-transform: uppercase; letter-spacing: 5px; margin-bottom: 5px; opacity: 0.8; }
-        .time-text { font-size: 64px; font-weight: 700; letter-spacing: 2px; margin-bottom: 10px; }
+        .time-text { font-size: 72px; font-weight: 700; letter-spacing: 2px; margin-bottom: 30px; line-height: 1; }
+        
+        .prog-row { width: 90%; margin-bottom: 15px; }
+        .prog-info { display: flex; justify-content: space-between; font-size: 10px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; opacity: 0.6; }
+        .prog-bar-bg { width: 100%; height: 4px; background: rgba(255, 255, 255, 0.1); border-radius: 10px; overflow: hidden; }
+        .prog-bar-fill { height: 100%; background: #fff; width: 0%; transition: width 0.5s ease; box-shadow: 0 0 8px rgba(255,255,255,0.4); }
 
         .time-display { display: flex; justify-content: center; align-items: center; gap: 2px; margin-bottom: 25px; }
         .time-input { background: transparent; border: none; color: white; font-family: inherit; font-size: 64px; font-weight: 700; width: 120px; text-align: center; outline: none; -webkit-tap-highlight-color: transparent; -moz-appearance: textfield; }
-        
         .progress-container { width: 100%; height: 3px; background: rgba(255, 255, 255, 0.1); border-radius: 10px; margin-bottom: 25px; overflow: hidden; }
         .progress-bar { height: 100%; background: #fff; width: 100%; transition: width 1s linear; }
-        
         .presets { display: flex; justify-content: center; gap: 12px; margin-bottom: 25px; width: 100%; }
         .preset-btn { width: 34px; height: 34px; border-radius: 50%; border: 1px solid rgba(255, 255, 255, 0.15); background: rgba(255, 255, 255, 0.05); color: white; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; cursor: pointer; -webkit-tap-highlight-color: transparent; }
-        
         .controls { display: flex; justify-content: center; gap: 15px; margin-bottom: 10px; }
         button { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.1); color: white; padding: 10px 22px; border-radius: 14px; font-family: inherit; text-transform: uppercase; letter-spacing: 2px; font-size: 10px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
         .btn-start { background: white; color: black; font-weight: 700; border: none; }
@@ -41,12 +42,7 @@
         .selector-item { padding: 8px 16px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1); background: rgba(255, 255, 255, 0.05); font-size: 11px; cursor: pointer; transition: all 0.3s; color: rgba(255, 255, 255, 0.5); text-transform: uppercase; -webkit-tap-highlight-color: transparent; }
         .selector-item.active { background: rgba(255, 255, 255, 0.15); border-color: rgba(255, 255, 255, 0.5); color: white; box-shadow: 0 0 10px rgba(255, 255, 255, 0.2); }
 
-        .prog-row { width: 95%; margin-bottom: 20px; }
-        .prog-info { display: flex; justify-content: space-between; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; opacity: 0.8; }
-        .prog-bar-bg { width: 100%; height: 4px; background: rgba(255, 255, 255, 0.1); border-radius: 10px; overflow: hidden; }
-        .prog-bar-fill { height: 100%; background: #fff; width: 0%; transition: width 0.5s ease; box-shadow: 0 0 8px rgba(255,255,255,0.5); }
-
-        .quote-container { font-size: 15px; font-style: italic; margin-top: 10px; line-height: 1.6; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.15); min-height: 45px; display: flex; align-items: center; justify-content: center; color: #fff; opacity: 1; }
+        .quote-container { font-size: 15px; font-style: italic; margin-top: 10px; line-height: 1.6; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.15); min-height: 45px; display: flex; align-items: center; justify-content: center; color: #fff; }
         
         @keyframes finishPulse { 0%, 100% { box-shadow: 0 0 20px rgba(255,255,255,0.1); } 50% { box-shadow: 0 0 60px rgba(255,255,255,0.4); border-color: rgba(255,255,255,0.4); } }
         .widget.pulse-active { animation: finishPulse 2s infinite; }
@@ -60,9 +56,9 @@
         <video id="vid-shop" class="bg-video" src="videos/shop.mp4" loop muted playsinline></video>
         <video id="vid-yard" class="bg-video" src="videos/yard.mp4" loop muted playsinline></video>
     </div>
-    <audio id="aud-cafe" src="audios/rain.mp3" loop></audio>
-    <audio id="aud-shop" src="audios/fire.mp3" loop></audio>
-    <audio id="aud-yard" src="audios/lofi.mp3" loop></audio>
+    <audio id="aud-cafe" src="audios/rain.wav" loop></audio>
+    <audio id="aud-shop" src="audios/fire.wav" loop></audio>
+    <audio id="aud-yard" src="audios/lofi.wav" loop></audio>
     <audio id="finishSound" src="audios/notification.mp3"></audio>
 
     <div class="widget" id="mainWidget">
@@ -70,12 +66,15 @@
             <svg class="tab-icon active" id="tab-clock" onclick="switchTab('clock')" viewBox="0 0 24 24"><path d="M12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2zm0 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16zm1 8h4v2h-6V7h2v5z"/></svg>
             <svg class="tab-icon" id="tab-timer" onclick="switchTab('timer')" viewBox="0 0 24 24"><path d="M6 2h12v2H6V2zm11.5 7.6l1.4-1.4L20.3 9.6l-1.4 1.4c.7 1.1 1.1 2.4 1.1 3.8 0 3.9-3.1 7-7 7s-7-3.1-7-7c0-1.4.4-2.7 1.1-3.8L5.7 9.6l1.4-1.4 1.4 1.4c1.1-.7 2.4-1.1 3.8-1.1 1.4 0 2.7.4 3.8 1.1l-.4.4zm-5.5 1.4v4h4v-4h-4z"/></svg>
             <svg class="tab-icon" id="tab-media" onclick="switchTab('media')" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
-            <svg class="tab-icon" id="tab-progress" onclick="switchTab('progress')" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm4.59-12.42L10 14.17l-2.59-2.58L6 13l4 4 8-8z"/></svg>
         </div>
 
         <div id="view-clock" class="view active">
-            <div class="day" id="day"></div>
             <div class="time-text" id="time-text">00:00:00</div>
+            
+            <div class="prog-row"><div class="prog-info"><span>Day</span><span id="p-day-val">0%</span></div><div class="prog-bar-bg"><div id="p-day-bar" class="prog-bar-fill"></div></div></div>
+            <div class="prog-row"><div class="prog-info"><span>Week</span><span id="p-week-val">0%</span></div><div class="prog-bar-bg"><div id="p-week-bar" class="prog-bar-fill"></div></div></div>
+            <div class="prog-row"><div class="prog-info"><span>Month</span><span id="p-month-val">0%</span></div><div class="prog-bar-bg"><div id="p-month-bar" class="prog-bar-fill"></div></div></div>
+            <div class="prog-row"><div class="prog-info"><span>Year</span><span id="p-year-val">0%</span></div><div class="prog-bar-bg"><div id="p-year-bar" class="prog-bar-fill"></div></div></div>
         </div>
 
         <div id="view-timer" class="view">
@@ -92,37 +91,34 @@
             <div class="selector-group"><div class="selector-item" id="a-cafe" onclick="toggleAudio('cafe')">Rain</div><div class="selector-item" id="a-shop" onclick="toggleAudio('shop')">Fire</div><div class="selector-item" id="a-yard" onclick="toggleAudio('yard')">Lo-fi</div></div>
         </div>
 
-        <div id="view-progress" class="view">
-            <div class="prog-row"><div class="prog-info"><span>Day</span><span id="p-day-val">0%</span></div><div class="prog-bar-bg"><div id="p-day-bar" class="prog-bar-fill"></div></div></div>
-            <div class="prog-row"><div class="prog-info"><span>Week</span><span id="p-week-val">0%</span></div><div class="prog-bar-bg"><div id="p-week-bar" class="prog-bar-fill"></div></div></div>
-            <div class="prog-row"><div class="prog-info"><span>Month</span><span id="p-month-val">0%</span></div><div class="prog-bar-bg"><div id="p-month-bar" class="prog-bar-fill"></div></div></div>
-            <div class="prog-row"><div class="prog-info"><span>Year</span><span id="p-year-val">0%</span></div><div class="prog-bar-bg"><div id="p-year-bar" class="prog-bar-fill"></div></div></div>
-        </div>
-
         <div class="quote-container" id="quote"></div>
     </div>
 
     <script>
         const quotes = ["The future belongs to those who believe in the beauty of their dreams.", "Strive not to be a success, but rather to be of value.", "Every moment is a fresh beginning.", "Believe you can and you're halfway there.", "The only way to do great work is to love what you do.", "The best way to predict the future is to create it.", "The best preparation for tomorrow is doing your best today.", "The only limit to our realization of tomorrow will be our doubts of today.", "Action is the foundational key to all success.", "Discipline is the bridge between goals and accomplishment."];
         function switchTab(t){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.querySelectorAll('.tab-icon').forEach(i=>i.classList.remove('active'));document.getElementById('view-'+t).classList.add('active');document.getElementById('tab-'+t).classList.add('active')}
-        function updateTime(){const n=new Date();document.getElementById('day').textContent=n.toLocaleDateString('en-US',{weekday:'long'});document.getElementById('time-text').textContent=n.toLocaleTimeString('en-GB');updateProgress(n)}
+        function updateTime(){const n=new Date();document.getElementById('time-text').textContent=n.toLocaleTimeString('en-GB');updateProgress(n)}
         setInterval(updateTime,1000);
         function setRandomQuote(){document.getElementById("quote").textContent=quotes[Math.floor(Math.random()*quotes.length)]}
         setInterval(setRandomQuote,60000);setRandomQuote();
+        
         let activeVid=null, activeAud=null;
         function toggleVideo(k){const v=document.getElementById('vid-'+k);const item=document.getElementById('v-'+k);if(activeVid&&activeVid!==k){document.getElementById('vid-'+activeVid).pause();document.getElementById('vid-'+activeVid).classList.remove('active');document.getElementById('v-'+activeVid).classList.remove('active')}if(activeVid===k){v.pause();v.classList.remove('active');item.classList.remove('active');activeVid=null}else{v.play();v.classList.add('active');item.classList.add('active');activeVid=k}}
         function toggleAudio(k){const a=document.getElementById('aud-'+k);const item=document.getElementById('a-'+k);if(activeAud&&activeAud!==k){document.getElementById('aud-'+activeAud).pause();document.getElementById('a-'+activeAud).classList.remove('active')}if(activeAud===k){a.pause();item.classList.remove('active');activeAud=null}else{a.play();item.classList.add('active');activeAud=k}}
+        
         let timer=null,totalS=0,remainS=0,running=false;
         const minI=document.getElementById('min'),secI=document.getElementById('sec'),startB=document.getElementById('startBtn'),bar=document.getElementById('bar'),sound=document.getElementById('finishSound'),mainW=document.getElementById('mainWidget');
         function setPreset(m){resetTimer();minI.value=String(m).padStart(2,'0');secI.value="00"}
         function toggleTimer(){mainW.classList.remove('pulse-active');if(running){clearInterval(timer);startB.textContent='Start';running=false}else{if(remainS<=0){remainS=(parseInt(minI.value)||0)*60+(parseInt(secI.value)||0);totalS=remainS}if(remainS>0){running=true;startB.textContent='Pause';timer=setInterval(()=>{remainS--;minI.value=String(Math.floor(remainS/60)).padStart(2,'0');secI.value=String(remainS%60).padStart(2,'0');bar.style.width=(remainS/totalS*100)+'%';if(remainS<=0){clearInterval(timer);sound.play();mainW.classList.add('pulse-active');resetTimer(true)}},1000)}}}
         function resetTimer(auto=false){clearInterval(timer);running=false;remainS=0;totalS=0;startB.textContent='Start';bar.style.width='100%';minI.value="60";secI.value="00";if(!auto)mainW.classList.remove('pulse-active')}
+        
         function getDayOfYear(d){const s=new Date(d.getFullYear(),0,0);return Math.floor((d-s)/86400000)}
         function updateProgress(n){
             const dayP=((n.getHours()*3600+n.getMinutes()*60+n.getSeconds())/86400)*100;
             const weekDay=n.getDay()===0?7:n.getDay(); const weekP=((weekDay-1+(dayP/100))/7)*100;
             const daysInM=new Date(n.getFullYear(),n.getMonth()+1,0).getDate(); const monthP=((n.getDate()-1+(dayP/100))/daysInM)*100;
             const daysInY=(n.getFullYear()%4===0&&n.getFullYear()%100>0)||n.getFullYear()%400===0?366:365; const yearP=((getDayOfYear(n)-1+(dayP/100))/daysInY)*100;
+            
             document.getElementById('p-day-val').textContent=dayP.toFixed(0)+'%'; document.getElementById('p-day-bar').style.width=dayP+'%';
             document.getElementById('p-week-val').textContent=weekP.toFixed(0)+'%'; document.getElementById('p-week-bar').style.width=weekP+'%';
             document.getElementById('p-month-val').textContent=monthP.toFixed(0)+'%'; document.getElementById('p-month-bar').style.width=monthP+'%';
