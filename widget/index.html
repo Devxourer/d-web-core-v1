@@ -3,46 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Dashboard Hub v3.5</title>
+    <title>Dashboard Hub</title>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
     <style>
         body, html { margin: 0; padding: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; font-family: "Space Grotesk", sans-serif; background-color: #000; overflow: hidden; user-select: none; -webkit-user-select: none; }
         
-        /* Исправили путь и добавили принудительный размер */
-        .bg-photo { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url("images/background.jpg") center center / cover no-repeat; z-index: 1; }
+        /* Проверь, что файл в папке images называется именно background.jpg */
+        .bg-photo { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000 url("./images/background.jpg") center center / cover no-repeat; z-index: 1; }
         
         .video-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 2; pointer-events: none; }
-        .bg-video { position: absolute; top: 50%; left: 50%; width: 100.5%; height: 100.5%; object-fit: cover; transform: translate(-50%, -50%); opacity: 0; transition: opacity 0.8s ease; }
+        .bg-video { position: absolute; top: 50%; left: 50%; width: 101%; height: 101%; object-fit: cover; transform: translate(-50%, -50%); opacity: 0; transition: opacity 0.8s ease; }
         .bg-video.active { opacity: 1; }
 
-        /* Увеличили основной блок, чтобы ничего не вылетало */
-        .widget { position: relative; z-index: 10; width: 420px; min-height: 380px; background: rgba(0, 0, 0, 0.4); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border-radius: 32px; border: 1px solid rgba(255, 255, 255, 0.1); color: white; text-align: center; box-shadow: 0 25px 60px rgba(0,0,0,0.6); padding: 40px; display: flex; flex-direction: column; justify-content: space-between; box-sizing: border-box; }
+        .widget { position: relative; z-index: 10; width: 440px; min-height: 400px; background: rgba(0, 0, 0, 0.45); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); border-radius: 32px; border: 1px solid rgba(255, 255, 255, 0.1); color: white; text-align: center; box-shadow: 0 25px 60px rgba(0,0,0,0.6); padding: 45px 35px; display: flex; flex-direction: column; justify-content: space-between; box-sizing: border-box; }
         
-        .tabs { display: flex; justify-content: center; gap: 45px; margin-bottom: 20px; }
+        .tabs { display: flex; justify-content: center; gap: 45px; margin-bottom: 25px; }
         .tab-icon { cursor: pointer; width: 28px; height: 28px; fill: white; opacity: 0.2; transition: all 0.3s; }
         .tab-icon.active { opacity: 1; filter: drop-shadow(0 0 8px white); }
         
         .view { display: none; flex-grow: 1; }
         .view.active { display: flex; flex-direction: column; justify-content: center; align-items: center; }
         
-        .day { font-size: 20px; text-transform: uppercase; letter-spacing: 6px; margin-bottom: 8px; opacity: 0.8; }
-        .time-text { font-size: 72px; font-weight: 700; letter-spacing: 2px; }
-        .time-text span { cursor: pointer; }
+        .day { font-size: 20px; text-transform: uppercase; letter-spacing: 6px; margin-bottom: 10px; opacity: 0.8; }
+        .time-text { font-size: 76px; font-weight: 700; letter-spacing: 2px; }
+        .time-text span { cursor: pointer; display: inline-block; transition: transform 0.1s; }
+        .time-text span:active { transform: scale(0.95); }
 
-        .time-display { display: flex; justify-content: center; align-items: center; gap: 2px; margin-bottom: 20px; }
-        /* Увеличили ширину инпутов, чтобы цифры не обрезались */
-        .time-input { background: transparent; border: none; color: white; font-family: inherit; font-size: 72px; font-weight: 700; width: 125px; text-align: center; outline: none; cursor: pointer; }
+        .time-display { display: flex; justify-content: center; align-items: center; gap: 2px; margin-bottom: 25px; }
+        .time-input { background: transparent; border: none; color: white; font-family: inherit; font-size: 76px; font-weight: 700; width: 140px; text-align: center; outline: none; cursor: pointer; }
 
-        .progress-container { width: 100%; height: 4px; background: rgba(255, 255, 255, 0.1); border-radius: 10px; margin-bottom: 30px; overflow: hidden; }
-        .progress-bar { height: 100%; background: #fff; width: 100%; transition: width 1s linear; box-shadow: 0 0 10px white; }
+        .progress-container { width: 100%; height: 5px; background: rgba(255, 255, 255, 0.1); border-radius: 10px; margin-bottom: 30px; overflow: hidden; }
+        .progress-bar { height: 100%; background: #fff; width: 100%; transition: width 1s linear; box-shadow: 0 0 15px white; }
         
-        .controls { display: flex; justify-content: center; gap: 15px; }
-        button { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.1); color: white; padding: 12px 28px; border-radius: 16px; font-family: inherit; text-transform: uppercase; letter-spacing: 2px; font-size: 11px; cursor: pointer; }
-        .btn-start { background: white; color: black; font-weight: 700; }
+        .controls { display: flex; justify-content: center; gap: 20px; }
+        button { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.1); color: white; padding: 14px 32px; border-radius: 18px; font-family: inherit; text-transform: uppercase; letter-spacing: 2px; font-size: 11px; cursor: pointer; transition: all 0.2s; }
+        button:active { transform: scale(0.95); }
+        .btn-start { background: white; color: black; font-weight: 700; border: none; }
 
-        .quote-container { font-size: 15px; font-style: italic; opacity: 0.5; margin-top: 30px; line-height: 1.6; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.05); min-height: 50px; }
+        .quote-container { font-size: 15px; font-style: italic; opacity: 0.5; margin-top: 35px; line-height: 1.6; padding-top: 25px; border-top: 1px solid rgba(255, 255, 255, 0.08); min-height: 60px; }
         
-        @keyframes finishPulse { 0%, 100% { box-shadow: 0 0 20px rgba(255,255,255,0.1); } 50% { box-shadow: 0 0 60px rgba(255,255,255,0.5); border-color: rgba(255,255,255,0.4); } }
+        @keyframes finishPulse { 0%, 100% { box-shadow: 0 0 20px rgba(255,255,255,0.1); } 50% { box-shadow: 0 0 60px rgba(255,255,255,0.4); border-color: rgba(255,255,255,0.4); } }
         .widget.pulse-active { animation: finishPulse 2s infinite; }
         input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
     </style>
@@ -50,15 +50,15 @@
 <body>
     <div class="bg-photo"></div>
     <div class="video-container">
-        <video id="vid-cafe" class="bg-video" src="videos/rainy_cafe.mp4" loop muted playsinline></video>
-        <video id="vid-shop" class="bg-video" src="videos/rainy_shop.mp4" loop muted playsinline></video>
-        <video id="vid-yard" class="bg-video" src="videos/sunny_yard.mp4" loop muted playsinline></video>
+        <video id="vid-cafe" class="bg-video" src="./videos/rainy_cafe.mp4" loop muted playsinline preload="auto"></video>
+        <video id="vid-shop" class="bg-video" src="./videos/rainy_shop.mp4" loop muted playsinline preload="auto"></video>
+        <video id="vid-yard" class="bg-video" src="./videos/sunny_yard.mp4" loop muted playsinline preload="auto"></video>
     </div>
     
-    <audio id="aud-cafe" src="audios/rainy_cafe.mp3"></audio>
-    <audio id="aud-shop" src="audios/rainy_shop.mp3"></audio>
-    <audio id="aud-yard" src="audios/sunny_yard.mp3"></audio>
-    <audio id="finishSound" src="audios/notification.mp3"></audio>
+    <audio id="aud-cafe" src="./audios/rainy_cafe.mp3" loop preload="auto"></audio>
+    <audio id="aud-shop" src="./audios/rainy_shop.mp3" loop preload="auto"></audio>
+    <audio id="aud-yard" src="./audios/sunny_yard.mp3" loop preload="auto"></audio>
+    <audio id="finishSound" src="./audios/notification.mp3" preload="auto"></audio>
 
     <div class="widget" id="mainWidget">
         <div class="tabs">
@@ -112,16 +112,20 @@
         let activeKey = null;
 
         function toggleAtmosphere(key) {
+            // Остановка текущего
             if (activeKey && activeKey !== key) {
                 vids[activeKey].pause(); vids[activeKey].classList.remove('active');
                 auds[activeKey].pause();
             }
+            
             if (activeKey === key) {
                 vids[key].pause(); vids[key].classList.remove('active');
                 auds[key].pause(); activeKey = null;
             } else {
-                vids[key].play(); vids[key].classList.add('active');
-                auds[key].loop = true; auds[key].play(); 
+                // Запуск нового
+                vids[key].play().catch(e => console.log("Video error"));
+                vids[key].classList.add('active');
+                auds[key].play().catch(e => console.log("Audio error"));
                 activeKey = key;
             }
         }
