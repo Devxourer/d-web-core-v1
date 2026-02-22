@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Aesthetic Focus Timer</title>
+    <title>Minimal Focus Timer</title>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
     <style>
         body, html {
@@ -25,84 +25,87 @@
         .widget {
             position: relative;
             z-index: 10;
-            padding: 40px 30px;
-            width: 320px;
-            background: rgba(0, 0, 0, 0.45);
+            padding: 25px 20px;
+            width: 260px;
+            background: rgba(0, 0, 0, 0.4);
             -webkit-backdrop-filter: blur(5px);
             backdrop-filter: blur(5px);
-            border-radius: 24px;
+            border-radius: 20px;
             border: 1px solid rgba(255, 255, 255, 0.1);
             color: white;
             text-align: center;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
             display: none;
-            pointer-events: auto;
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
-        .widget.visible {
-            display: block;
+        .widget.visible { 
+            display: block; 
+            opacity: 1;
         }
         .label {
             text-transform: uppercase;
             letter-spacing: 4px;
-            font-size: 12px;
-            opacity: 0.6;
-            margin-bottom: 20px;
+            font-size: 10px;
+            opacity: 0.5;
+            margin-bottom: 12px;
         }
         .time-display {
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 5px;
-            font-size: 64px;
+            gap: 2px;
+            font-size: 48px;
             font-weight: 700;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
+            letter-spacing: 3px;
         }
         .time-input {
             background: transparent;
             border: none;
             color: white;
             font-family: "Space Grotesk", sans-serif;
-            font-size: 64px;
+            font-size: 48px;
             font-weight: 700;
-            width: 85px;
+            width: 65px;
             text-align: center;
             outline: none;
             cursor: pointer;
         }
         .progress-container {
             width: 100%;
-            height: 4px;
+            height: 3px;
             background: rgba(255, 255, 255, 0.1);
             border-radius: 10px;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             overflow: hidden;
         }
         .progress-bar {
             height: 100%;
             background: #ffffff;
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
             width: 100%;
             transition: width 1s linear;
         }
         .controls {
             display: flex;
             justify-content: center;
-            gap: 15px;
+            gap: 10px;
         }
         button {
             background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.15);
             color: white;
-            padding: 10px 20px;
-            border-radius: 12px;
+            padding: 8px 16px;
+            border-radius: 10px;
             font-family: "Space Grotesk", sans-serif;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            font-size: 12px;
+            letter-spacing: 2px;
+            font-size: 10px;
             cursor: pointer;
             transition: all 0.2s;
         }
-        button:active { transform: scale(0.95); background: rgba(255, 255, 255, 0.3); }
+        button:active { transform: scale(0.95); background: rgba(255, 255, 255, 0.2); }
         .btn-start { background: white; color: black; font-weight: 700; border: none; }
         input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
     </style>
@@ -138,7 +141,13 @@
         const sound = document.getElementById('finishSound');
 
         function toggleWidget() {
-            widget.classList.toggle('visible');
+            if (widget.style.display === 'block') {
+                widget.style.opacity = '0';
+                setTimeout(() => widget.style.display = 'none', 300);
+            } else {
+                widget.style.display = 'block';
+                setTimeout(() => widget.style.opacity = '1', 10);
+            }
         }
 
         function updateDisplay(s) {
@@ -172,7 +181,7 @@
                         updateDisplay(remainingSeconds);
                         if (remainingSeconds <= 0) {
                             clearInterval(timer);
-                            sound.play();
+                            sound.play().catch(e => console.log("Sound play error"));
                             resetTimer();
                         }
                     }, 1000);
