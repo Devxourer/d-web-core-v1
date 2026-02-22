@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Dashboard Hub</title>
+    <title>Dashboard Hub v4.4</title>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
     <style>
         body, html { margin: 0; padding: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; font-family: "Space Grotesk", sans-serif; background-color: #000; overflow: hidden; user-select: none; -webkit-user-select: none; }
@@ -18,13 +18,11 @@
         .view { display: none; }
         .view.active { display: flex; flex-direction: column; align-items: center; }
         .day { font-size: 16px; text-transform: uppercase; letter-spacing: 5px; margin-bottom: 2px; opacity: 0.8; }
-        .time-text { font-size: 60px; font-weight: 700; letter-spacing: 2px; margin-bottom: 5px; }
-        .time-text span { cursor: pointer; display: inline-block; transition: transform 0.1s; }
-        .atmosphere-control { display: flex; justify-content: center; align-items: center; gap: 25px; height: 30px; margin-top: 5px; }
-        .atmos-btn { cursor: pointer; width: 18px; height: 18px; fill: white; opacity: 0.2; transition: all 0.3s; }
-        .atmos-btn.active { opacity: 0.9; filter: drop-shadow(0 0 5px white); }
-        .media-label { font-size: 10px; text-transform: uppercase; letter-spacing: 3px; opacity: 0.4; margin: 10px 0 8px; }
-        .media-row { display: flex; justify-content: center; gap: 25px; margin-bottom: 10px; }
+        .time-text { font-size: 60px; font-weight: 700; letter-spacing: 2px; margin-bottom: 15px; }
+        .selector-label { font-size: 10px; text-transform: uppercase; letter-spacing: 3px; opacity: 0.4; margin: 12px 0 10px; }
+        .selector-group { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 5px; }
+        .selector-item { padding: 6px 12px; border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.1); background: rgba(255, 255, 255, 0.05); font-size: 10px; letter-spacing: 1px; cursor: pointer; transition: all 0.3s; color: rgba(255, 255, 255, 0.5); text-transform: uppercase; }
+        .selector-item.active { background: rgba(255, 255, 255, 0.15); border-color: rgba(255, 255, 255, 0.5); color: white; box-shadow: 0 0 10px rgba(255, 255, 255, 0.2); }
         .time-display { display: flex; justify-content: center; align-items: center; gap: 2px; margin-bottom: 10px; }
         .time-input { background: transparent; border: none; color: white; font-family: inherit; font-size: 60px; font-weight: 700; width: 115px; text-align: center; outline: none; }
         .progress-container { width: 100%; height: 3px; background: rgba(255, 255, 255, 0.1); border-radius: 10px; margin-bottom: 15px; overflow: hidden; }
@@ -37,7 +35,6 @@
         .quote-container { font-size: 13px; font-style: italic; margin-top: 15px; line-height: 1.4; padding-top: 15px; border-top: 1px solid rgba(255, 255, 255, 0.15); min-height: 35px; display: flex; align-items: center; justify-content: center; color: #fff; opacity: 1; }
         @keyframes finishPulse { 0%, 100% { box-shadow: 0 0 20px rgba(255,255,255,0.1); } 50% { box-shadow: 0 0 60px rgba(255,255,255,0.4); border-color: rgba(255,255,255,0.4); } }
         .widget.pulse-active { animation: finishPulse 2s infinite; }
-        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
     </style>
 </head>
 <body>
@@ -59,12 +56,7 @@
         </div>
         <div id="view-clock" class="view active">
             <div class="day" id="day"></div>
-            <div class="time-text"><span onclick="toggleVideo('cafe')">00</span>:<span onclick="toggleVideo('shop')">00</span>:<span onclick="toggleVideo('yard')">00</span></div>
-            <div class="atmosphere-control">
-                <svg class="atmos-btn" id="btn-cafe-clock" onclick="toggleAudio('cafe')" viewBox="0 0 24 24"><path d="M12 2s-7 7.148-7 11.5c0 3.866 3.134 7 7 7s7-3.134 7-7c0-4.352-7-11.5-7-11.5zm0 16.5c-2.761 0-5-2.239-5-5 0-2.316 2.92-6.52 5-9.088 2.08 2.568 5 6.772 5 9.088 0 2.761-2.239 5-5 5z"/></svg>
-                <svg class="atmos-btn" id="btn-shop-clock" onclick="toggleAudio('shop')" viewBox="0 0 24 24"><path d="M17.657 14.122a6.994 6.994 0 0 0-3.322-3.834c-2.486-1.341-2.486-4.223-2.486-4.223s-1.896 1.838-2.35 4.316c-.454 2.478.432 4.195 1.512 5.06a5.5 5.5 0 0 1-5.187-5.465c0-1.282.432-2.463 1.156-3.402C4.162 8.01 2 10.754 2 14c0 5.523 4.477 10 10 10s10-4.477 10-10c0-2.13-.666-4.103-1.808-5.732a6.99 6.99 0 0 0-2.535 5.854z"/></svg>
-                <svg class="atmos-btn" id="btn-yard-clock" onclick="toggleAudio('yard')" viewBox="0 0 24 24"><path d="M21 3v12.5a3.5 3.5 0 1 1-2-3.13V5h-7v13.5a3.5 3.5 0 1 1-2-3.13V3h11zm-9 15.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0zm11 0a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0z"/></svg>
-            </div>
+            <div class="time-text" id="time-text">00:00:00</div>
         </div>
         <div id="view-timer" class="view">
             <div class="time-display"><input type="number" id="min" class="time-input" value="60">:<input type="number" id="sec" class="time-input" value="00"></div>
@@ -73,17 +65,17 @@
             <div class="controls"><button class="btn-start" id="startBtn" onclick="toggleTimer()">Start</button><button onclick="resetTimer()">Reset</button></div>
         </div>
         <div id="view-media" class="view">
-            <div class="media-label">Visuals</div>
-            <div class="media-row">
-                <svg class="atmos-btn" id="vbtn-cafe" onclick="toggleVideo('cafe')" viewBox="0 0 24 24"><path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-10 14.5v-9l6 4.5-6 4.5z"/></svg>
-                <svg class="atmos-btn" id="vbtn-shop" onclick="toggleVideo('shop')" viewBox="0 0 24 24"><path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-10 14.5v-9l6 4.5-6 4.5z"/></svg>
-                <svg class="atmos-btn" id="vbtn-yard" onclick="toggleVideo('yard')" viewBox="0 0 24 24"><path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-10 14.5v-9l6 4.5-6 4.5z"/></svg>
+            <div class="selector-label">Visual Atmosphere</div>
+            <div class="selector-group">
+                <div class="selector-item" id="v-cafe" onclick="toggleVideo('cafe')">Cafe</div>
+                <div class="selector-item" id="v-shop" onclick="toggleVideo('shop')">Shop</div>
+                <div class="selector-item" id="v-yard" onclick="toggleVideo('yard')">Yard</div>
             </div>
-            <div class="media-label">Atmosphere</div>
-            <div class="media-row">
-                <svg class="atmos-btn" id="abtn-cafe" onclick="toggleAudio('cafe')" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
-                <svg class="atmos-btn" id="abtn-shop" onclick="toggleAudio('shop')" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
-                <svg class="atmos-btn" id="abtn-yard" onclick="toggleAudio('yard')" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+            <div class="selector-label">Background Audio</div>
+            <div class="selector-group">
+                <div class="selector-item" id="a-cafe" onclick="toggleAudio('cafe')">Rain</div>
+                <div class="selector-item" id="a-shop" onclick="toggleAudio('shop')">Fire</div>
+                <div class="selector-item" id="a-yard" onclick="toggleAudio('yard')">Jazz</div>
             </div>
         </div>
         <div class="quote-container" id="quote"></div>
@@ -91,14 +83,13 @@
     <script>
         const quotes = ["The future belongs to those who believe in the beauty of their dreams.", "Strive not to be a success, but rather to be of value.", "Every moment is a fresh beginning.", "Believe you can and you're halfway there.", "The only way to do great work is to love what you do.", "The best way to predict the future is to create it.", "The best preparation for tomorrow is doing your best today.", "The only limit to our realization of tomorrow will be our doubts of today.", "Action is the foundational key to all success.", "Discipline is the bridge between goals and accomplishment."];
         function switchTab(t){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.querySelectorAll('.tab-icon').forEach(i=>i.classList.remove('active'));document.getElementById('view-'+t).classList.add('active');document.getElementById('tab-'+t).classList.add('active')}
-        function updateTime(){const n=new Date();const h=String(n.getHours()).padStart(2,'0'),m=String(n.getMinutes()).padStart(2,'0'),s=String(n.getSeconds()).padStart(2,'0');document.getElementById('day').textContent=n.toLocaleDateString('en-US',{weekday:'long'});const spans=document.querySelectorAll('.time-text span');if(spans.length){spans[0].textContent=h;spans[1].textContent=m;spans[2].textContent=s}}
+        function updateTime(){const n=new Date();const h=String(n.getHours()).padStart(2,'0'),m=String(n.getMinutes()).padStart(2,'0'),s=String(n.getSeconds()).padStart(2,'0');document.getElementById('day').textContent=n.toLocaleDateString('en-US',{weekday:'long'});document.getElementById('time-text').textContent=`${h}:${m}:${s}`}
         setInterval(updateTime,1000);updateTime();
         function setRandomQuote(){document.getElementById("quote").textContent=quotes[Math.floor(Math.random()*quotes.length)]}
         setInterval(setRandomQuote,60000);setRandomQuote();
-        let activeVid=null;
-        function toggleVideo(k){const v=document.getElementById('vid-'+k);const btn=document.getElementById('vbtn-'+k);if(activeVid&&activeVid!==k){document.getElementById('vid-'+activeVid).pause();document.getElementById('vid-'+activeVid).classList.remove('active');if(document.getElementById('vbtn-'+activeVid))document.getElementById('vbtn-'+activeVid).classList.remove('active')}if(activeVid===k){v.pause();v.classList.remove('active');if(btn)btn.classList.remove('active');activeVid=null}else{v.play();v.classList.add('active');if(btn)btn.classList.add('active');activeVid=k}}
-        let activeAud=null;
-        function toggleAudio(k){const a=document.getElementById('aud-'+k);const bC=document.getElementById('btn-'+k+'-clock');const bM=document.getElementById('abtn-'+k);if(activeAud&&activeAud!==k){document.getElementById('aud-'+activeAud).pause();if(document.getElementById('btn-'+activeAud+'-clock'))document.getElementById('btn-'+activeAud+'-clock').classList.remove('active');if(document.getElementById('abtn-'+activeAud))document.getElementById('abtn-'+activeAud).classList.remove('active')}if(activeAud===k){a.pause();if(bC)bC.classList.remove('active');if(bM)bM.classList.remove('active');activeAud=null}else{a.play();if(bC)bC.classList.add('active');if(bM)bM.classList.add('active');activeAud=k}}
+        let activeVid=null, activeAud=null;
+        function toggleVideo(k){const v=document.getElementById('vid-'+k);const item=document.getElementById('v-'+k);if(activeVid&&activeVid!==k){document.getElementById('vid-'+activeVid).pause();document.getElementById('vid-'+activeVid).classList.remove('active');document.getElementById('v-'+activeVid).classList.remove('active')}if(activeVid===k){v.pause();v.classList.remove('active');item.classList.remove('active');activeVid=null}else{v.play();v.classList.add('active');item.classList.add('active');activeVid=k}}
+        function toggleAudio(k){const a=document.getElementById('aud-'+k);const item=document.getElementById('a-'+k);if(activeAud&&activeAud!==k){document.getElementById('aud-'+activeAud).pause();document.getElementById('a-'+activeAud).classList.remove('active')}if(activeAud===k){a.pause();item.classList.remove('active');activeAud=null}else{a.play();item.classList.add('active');activeAud=k}}
         let timer=null,totalS=0,remainS=0,running=false;
         const minI=document.getElementById('min'),secI=document.getElementById('sec'),startB=document.getElementById('startBtn'),bar=document.getElementById('bar'),sound=document.getElementById('finishSound'),mainW=document.getElementById('mainWidget');
         function setPreset(m){resetTimer();minI.value=String(m).padStart(2,'0');secI.value="00"}
