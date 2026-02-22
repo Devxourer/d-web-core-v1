@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Aesthetic Focus Timer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+    <style>
+        body, html {
+            margin: 0; padding: 0;
+            width: 100%; height: 100%;
+            display: flex; justify-content: center; align-items: center;
+            font-family: "Space Grotesk", sans-serif;
+            background-color: #000;
+            overflow: hidden;
+            user-select: none; -webkit-user-select: none;
+        }
+        .bg-photo {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: url("image.jpg") center center / cover no-repeat;
+            z-index: 1;
+        }
+        .widget {
+            position: relative;
+            z-index: 10;
+            padding: 40px 30px;
+            width: 320px;
+            background: rgba(0, 0, 0, 0.45);
+            -webkit-backdrop-filter: blur(15px);
+            backdrop-filter: blur(15px);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+        .label {
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            font-size: 12px;
+            opacity: 0.6;
+            margin-bottom: 20px;
+        }
+        .time-display {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            font-size: 64px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        .time-input {
+            background: transparent;
+            border: none;
+            color: white;
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 64px;
+            font-weight: 700;
+            width: 85px;
+            text-align: center;
+            outline: none;
+            cursor: pointer;
+        }
+        .progress-container {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            background: #ffffff;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+            width: 100%;
+            transition: width 1s linear;
+        }
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        button {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-family: "Space Grotesk", sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        button:active { transform: scale(0.95); background: rgba(255, 255, 255, 0.3); }
+        .btn-start { background: white; color: black; font-weight: 700; border: none; }
+        .btn-preset { border-color: rgba(255, 255, 255, 0.5); }
+        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    </style>
+</head>
+<body>
+    <div class="bg-photo"></div>
+    <div class="widget">
+        <div class="label" id="status">Focus Session</div>
+        <div class="time-display">
+            <input type="number" id="min" class="time-input" value="30" min="0" max="99">:
+            <input type="number" id="sec" class="time-input" value="00" min="0" max="59">
+        </div>
+        <div class="progress-container">
+            <div id="bar" class="progress-bar"></div>
+        </div>
+        <div class="controls">
+            <button class="btn-preset" onclick="setPreset(30)">30m</button>
+            <button class="btn-start" id="startBtn" onclick="toggleTimer()">Start</button>
+            <button onclick="resetTimer()">Reset</button>
+        </div>
+    </div>
+    <script>
+        let timer = null;
+        let totalSeconds = 0;
+        let remainingSeconds = 0;
+        let isRunning = false;
+        const minInput = document.getElementById('min');
+        const secInput = document.getElementById('sec');
+        const startBtn = document.getElementById('startBtn');
+        const progressBar = document.getElementById('bar');
+        const statusLabel = document.getElementById('status');
+        function updateDisplay(s) {
+            const m = Math.floor(s / 60);
+            const rS = s % 60;
+            minInput.value = String(m).padStart(2, '0');
+            secInput.value = String(rS).padStart(2, '0');
+            const percent = totalSeconds > 0 ? (s / totalSeconds) * 100 : 100;
+            progressBar.style.width = percent + '%';
+        }
+        function setPreset(m) {
+            resetTimer();
+            minInput.value = String(m).padStart(2, '0');
+            secInput.value = "00";
+        }
+        function toggleTimer() {
+            if (isRunning) {
+                clearInterval(timer);
+                startBtn.textContent = 'Start';
+                statusLabel.textContent = 'Paused';
+                isRunning = false;
+            } else {
+                const m = parseInt(minInput.value) || 0;
+                const s = parseInt(secInput.value) || 0;
+                if (remainingSeconds <= 0) {
+                    remainingSeconds = (m * 60) + s;
+                    totalSeconds = remainingSeconds;
+                }
+                if (remainingSeconds > 0) {
+                    isRunning = true;
+                    startBtn.textContent = 'Stop';
+                    statusLabel.textContent = 'Deep Work...';
+                    timer = setInterval(() => {
+                        remainingSeconds--;
+                        updateDisplay(remainingSeconds);
+                        if (remainingSeconds <= 0) {
+                            clearInterval(timer);
+                            resetTimer();
+                        }
+                    }, 1000);
+                }
+            }
+        }
+        function resetTimer() {
+            clearInterval(timer);
+            isRunning = false;
+            remainingSeconds = 0;
+            totalSeconds = 0;
+            startBtn.textContent = 'Start';
+            statusLabel.textContent = 'Focus Session';
+            progressBar.style.width = '100%';
+        }
+    </script>
+</body>
+</html>
