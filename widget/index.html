@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Dashboard Hub v3.1</title>
+    <title>Dashboard Hub v3.3</title>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
     <style>
         body, html { margin: 0; padding: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; font-family: "Space Grotesk", sans-serif; background-color: #000; overflow: hidden; user-select: none; -webkit-user-select: none; }
-        .bg-photo { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url("image.jpg") center center / cover no-repeat; z-index: 1; }
+        .bg-photo { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url("images/background.jpg") center center / cover no-repeat; z-index: 1; }
         .video-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 2; pointer-events: none; }
         .bg-video { position: absolute; top: 50%; left: 50%; width: 102%; height: 102%; object-fit: cover; transform: translate(-50%, -50%); opacity: 0; transition: opacity 0.5s ease; }
         .bg-video.active { opacity: 1; }
@@ -35,14 +35,14 @@
 <body>
     <div class="bg-photo"></div>
     <div class="video-container">
-        <video id="vid-hours" class="bg-video" src="videos/video_1.mp4" loop muted playsinline></video>
-        <video id="vid-minutes" class="bg-video" src="videos/video_2.mp4" loop muted playsinline></video>
-        <video id="vid-seconds" class="bg-video" src="videos/video_3.mp4" loop muted playsinline></video>
+        <video id="vid-cafe" class="bg-video" src="videos/rainy_cafe.mp4" loop muted playsinline></video>
+        <video id="vid-shop" class="bg-video" src="videos/rainy_shop.mp4" loop muted playsinline></video>
+        <video id="vid-yard" class="bg-video" src="videos/sunny_yard.mp4" loop muted playsinline></video>
     </div>
     
-    <audio id="aud-hours" src="audios/audio_1.mp3" preload="auto"></audio>
-    <audio id="aud-minutes" src="audios/audio_2.mp3" preload="auto"></audio>
-    <audio id="aud-seconds" src="audios/audio_3.mp3" preload="auto"></audio>
+    <audio id="aud-cafe" src="audios/rainy_cafe.mp3" preload="auto"></audio>
+    <audio id="aud-shop" src="audios/rainy_shop.mp3" preload="auto"></audio>
+    <audio id="aud-yard" src="audios/sunny_yard.mp3" preload="auto"></audio>
     <audio id="finishSound" src="audios/notification.mp3" preload="auto"></audio>
 
     <div class="widget" id="mainWidget">
@@ -54,7 +54,7 @@
         <div id="view-clock" class="view active">
             <div class="day" id="day"></div>
             <div class="time-text">
-                <span id="time-hours" onclick="toggleAtmosphere('hours')">00</span>:<span id="time-minutes" onclick="toggleAtmosphere('minutes')">00</span>:<span id="time-seconds" onclick="toggleAtmosphere('seconds')">00</span>
+                <span id="time-hours" onclick="toggleAtmosphere('cafe')">00</span>:<span id="time-minutes" onclick="toggleAtmosphere('shop')">00</span>:<span id="time-seconds" onclick="toggleAtmosphere('yard')">00</span>
             </div>
         </div>
 
@@ -89,13 +89,12 @@
         function setRandomQuote() { document.getElementById("quote").textContent = quotes[Math.floor(Math.random() * quotes.length)]; }
         setInterval(setRandomQuote, 60000); setRandomQuote();
 
-        const vids = { hours: document.getElementById('vid-hours'), minutes: document.getElementById('vid-minutes'), seconds: document.getElementById('vid-seconds') };
-        const auds = { hours: document.getElementById('aud-hours'), minutes: document.getElementById('aud-minutes'), seconds: document.getElementById('aud-seconds') };
+        const vids = { cafe: document.getElementById('vid-cafe'), shop: document.getElementById('vid-shop'), yard: document.getElementById('vid-yard') };
+        const auds = { cafe: document.getElementById('aud-cafe'), shop: document.getElementById('aud-shop'), yard: document.getElementById('aud-yard') };
         let activeKey = null;
 
-        // ЛОГИКА ПЛАВНОГО ЦИКЛА
         function handleLoop(audio) {
-            const fadeTime = 0.6; // Время фейда в секундах
+            const fadeTime = 0.6;
             if (audio.currentTime > audio.duration - fadeTime) {
                 const fadeOut = setInterval(() => {
                     if (audio.volume > 0.1) { audio.volume -= 0.1; } 
