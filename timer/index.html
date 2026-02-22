@@ -30,19 +30,26 @@
             background: rgba(0, 0, 0, 0.4);
             -webkit-backdrop-filter: blur(5px);
             backdrop-filter: blur(5px);
-            border-radius: 20px;
+            border-radius: 24px;
             border: 1px solid rgba(255, 255, 255, 0.1);
             color: white;
             text-align: center;
             box-shadow: 0 15px 35px rgba(0,0,0,0.4);
             display: none;
             opacity: 0;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.3s ease, border-color 0.5s ease;
         }
-        .widget.visible { 
-            display: block; 
-            opacity: 1;
+        .widget.visible { display: block; opacity: 1; }
+        
+        @keyframes finishPulse {
+            0% { box-shadow: 0 0 15px rgba(255, 255, 255, 0.2); border-color: rgba(255, 255, 255, 0.1); }
+            50% { box-shadow: 0 0 40px rgba(255, 255, 255, 0.6), 0 0 80px rgba(255, 255, 255, 0.1); border-color: rgba(255, 255, 255, 0.5); }
+            100% { box-shadow: 0 0 15px rgba(255, 255, 255, 0.2); border-color: rgba(255, 255, 255, 0.1); }
         }
+        .widget.pulse-active {
+            animation: finishPulse 2s infinite ease-in-out;
+        }
+
         .label {
             text-transform: uppercase;
             letter-spacing: 4px;
@@ -160,6 +167,7 @@
         }
 
         function toggleTimer() {
+            widget.classList.remove('pulse-active');
             if (isRunning) {
                 clearInterval(timer);
                 startBtn.textContent = 'Start';
@@ -181,21 +189,25 @@
                         updateDisplay(remainingSeconds);
                         if (remainingSeconds <= 0) {
                             clearInterval(timer);
-                            sound.play().catch(e => console.log("Sound play error"));
-                            resetTimer();
+                            widget.classList.add('pulse-active');
+                            sound.play().catch(e => console.log("Sound error"));
+                            resetTimer(true);
                         }
                     }, 1000);
                 }
             }
         }
 
-        function resetTimer() {
-            clearInterval(timer);
+        function resetTimer(isAuto = false) {
+            if (!isAuto) {
+                clearInterval(timer);
+                widget.classList.remove('pulse-active');
+            }
             isRunning = false;
             remainingSeconds = 0;
             totalSeconds = 0;
             startBtn.textContent = 'Start';
-            statusLabel.textContent = 'Focus Session';
+            statusLabel.textContent = isAuto ? 'Finished' : 'Focus Session';
             progressBar.style.width = '100%';
             minInput.value = "60";
             secInput.value = "00";
