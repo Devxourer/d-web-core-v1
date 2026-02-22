@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Dashboard Hub v5.1</title>
+    <title>Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
     <style>
         body, html { margin: 0; padding: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; font-family: "Space Grotesk", sans-serif; background-color: #000; overflow: hidden; user-select: none; -webkit-user-select: none; }
@@ -21,15 +21,14 @@
         .view { display: none; height: 100%; flex-direction: column; align-items: center; justify-content: center; width: 100%; overflow: hidden; }
         .view.active { display: flex; }
 
-        .time-display { display: flex; justify-content: center; align-items: center; }
-        .time-text, .time-input, .time-separator { font-size: 60px; font-weight: 700; letter-spacing: 2px; line-height: 1; margin-bottom: 25px; }
-        .time-input { background: transparent; border: none; color: white; font-family: inherit; width: 130px; text-align: center; outline: none; -webkit-tap-highlight-color: transparent; }
-        .time-separator { color: white; width: 20px; text-align: center; transform: translateY(-3px); }
+        .date-day { font-size: 18px; text-transform: uppercase; letter-spacing: 4px; font-weight: 500; margin-bottom: 6px; }
+        .date-full { font-size: 13px; font-weight: 300; letter-spacing: 1px; margin-bottom: 25px; opacity: 0.9; }
 
-        .prog-row { width: 90%; margin-bottom: 15px; }
-        .prog-info { display: flex; justify-content: space-between; font-size: 10px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; opacity: 0.6; }
-        .prog-bar-bg { width: 100%; height: 4px; background: rgba(255, 255, 255, 0.1); border-radius: 10px; overflow: hidden; }
-        .prog-bar-fill { height: 100%; background: #fff; width: 0%; transition: width 0.5s ease; box-shadow: 0 0 8px rgba(255,255,255,0.4); }
+        .time-display { display: flex; justify-content: center; align-items: center; }
+        .time-text, .time-input, .time-separator { font-size: 60px; font-weight: 700; letter-spacing: 2px; line-height: 1; }
+        .time-text { margin-bottom: 10px; }
+        .time-input { background: transparent; border: none; color: white; font-family: inherit; width: 130px; text-align: center; outline: none; -webkit-tap-highlight-color: transparent; margin-bottom: 25px; }
+        .time-separator { color: white; width: 20px; text-align: center; transform: translateY(-3px); margin-bottom: 25px; }
 
         .progress-container { width: 90%; height: 4px; background: rgba(255, 255, 255, 0.1); border-radius: 10px; margin-bottom: 20px; overflow: hidden; }
         .progress-bar { height: 100%; background: #fff; width: 100%; transition: width 1s linear; }
@@ -46,7 +45,7 @@
         .selector-item { padding: 8px 16px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1); background: rgba(255, 255, 255, 0.05); font-size: 11px; cursor: pointer; transition: all 0.3s; color: rgba(255, 255, 255, 0.5); text-transform: uppercase; -webkit-tap-highlight-color: transparent; }
         .selector-item.active { background: rgba(255, 255, 255, 0.15); border-color: rgba(255, 255, 255, 0.5); color: white; box-shadow: 0 0 10px rgba(255, 255, 255, 0.2); }
 
-        .quote-container { font-size: 15px; font-style: italic; margin-top: 10px; line-height: 1.6; padding-top: 15px; border-top: 1px solid rgba(255, 255, 255, 0.15); min-height: 45px; display: flex; align-items: center; justify-content: center; color: #fff; flex-shrink: 0; }
+        .quote-container { font-size: 15px; font-style: italic; margin-top: 10px; line-height: 1.6; padding-top: 15px; border-top: 1px solid rgba(255, 255, 255, 0.15); min-height: 45px; display: flex; align-items: center; justify-content: center; color: #fff; flex-shrink: 0; background: rgba(0,0,0,0.2); border-radius: 8px; padding: 15px; border: none; }
         
         @keyframes finishPulse { 0%, 100% { box-shadow: 0 0 20px rgba(255,255,255,0.1); } 50% { box-shadow: 0 0 60px rgba(255,255,255,0.4); border-color: rgba(255,255,255,0.4); } }
         .widget.pulse-active { animation: finishPulse 2s infinite; }
@@ -74,11 +73,9 @@
         </div>
 
         <div id="view-clock" class="view active">
+            <div class="date-day" id="date-day">SUNDAY</div>
+            <div class="date-full" id="date-full">February 22, 2026</div>
             <div class="time-text" id="time-text">00:00:00</div>
-            <div class="prog-row"><div class="prog-info"><span>Day</span><span id="p-day-val">0%</span></div><div class="prog-bar-bg"><div id="p-day-bar" class="prog-bar-fill"></div></div></div>
-            <div class="prog-row"><div class="prog-info"><span>Week</span><span id="p-week-val">0%</span></div><div class="prog-bar-bg"><div id="p-week-bar" class="prog-bar-fill"></div></div></div>
-            <div class="prog-row"><div class="prog-info"><span>Month</span><span id="p-month-val">0%</span></div><div class="prog-bar-bg"><div id="p-month-bar" class="prog-bar-fill"></div></div></div>
-            <div class="prog-row"><div class="prog-info"><span>Year</span><span id="p-year-val">0%</span></div><div class="prog-bar-bg"><div id="p-year-bar" class="prog-bar-fill"></div></div></div>
         </div>
 
         <div id="view-timer" class="view">
@@ -100,9 +97,19 @@
 
     <script>
         const quotes = ["The future belongs to those who believe in the beauty of their dreams.", "Strive not to be a success, but rather to be of value.", "Every moment is a fresh beginning.", "Believe you can and you're halfway there.", "The only way to do great work is to love what you do.", "The best way to predict the future is to create it.", "The best preparation for tomorrow is doing your best today.", "The only limit to our realization of tomorrow will be our doubts of today.", "Action is the foundational key to all success.", "Discipline is the bridge between goals and accomplishment."];
+        const daysOfWeek = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
+        const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
         function switchTab(t){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.querySelectorAll('.tab-icon').forEach(i=>i.classList.remove('active'));document.getElementById('view-'+t).classList.add('active');document.getElementById('tab-'+t).classList.add('active')}
-        function updateTime(){const n=new Date();document.getElementById('time-text').textContent=n.toLocaleTimeString('en-GB');updateProgress(n)}
+        
+        function updateTime(){
+            const n=new Date();
+            document.getElementById('time-text').textContent=n.toLocaleTimeString('en-GB');
+            document.getElementById('date-day').textContent = daysOfWeek[n.getDay()];
+            document.getElementById('date-full').textContent = monthNames[n.getMonth()] + " " + n.getDate() + ", " + n.getFullYear();
+        }
         setInterval(updateTime,1000);
+        
         function setRandomQuote(){document.getElementById("quote").textContent=quotes[Math.floor(Math.random()*quotes.length)]}
         setInterval(setRandomQuote,60000);setRandomQuote();
         
@@ -116,18 +123,6 @@
         function toggleTimer(){mainW.classList.remove('pulse-active');if(running){clearInterval(timer);startB.textContent='Start';running=false}else{if(remainS<=0){remainS=(parseInt(minI.value)||0)*60+(parseInt(secI.value)||0);totalS=remainS}if(remainS>0){running=true;startB.textContent='Pause';timer=setInterval(()=>{remainS--;minI.value=String(Math.floor(remainS/60)).padStart(2,'0');secI.value=String(remainS%60).padStart(2,'0');bar.style.width=(remainS/totalS*100)+'%';if(remainS<=0){clearInterval(timer);sound.play();mainW.classList.add('pulse-active');resetTimer(true)}},1000)}}}
         function resetTimer(auto=false){clearInterval(timer);running=false;remainS=0;totalS=0;startB.textContent='Start';bar.style.width='100%';minI.value="60";secI.value="00";if(!auto)mainW.classList.remove('pulse-active')}
         
-        function getDayOfYear(d){const s=new Date(d.getFullYear(),0,0);return Math.floor((d-s)/86400000)}
-        function updateProgress(n){
-            const dayP=((n.getHours()*3600+n.getMinutes()*60+n.getSeconds())/86400)*100;
-            const weekDay=n.getDay()===0?7:n.getDay(); const weekP=((weekDay-1+(dayP/100))/7)*100;
-            const daysInM=new Date(n.getFullYear(),n.getMonth()+1,0).getDate(); const monthP=((n.getDate()-1+(dayP/100))/daysInM)*100;
-            const daysInY=(n.getFullYear()%4===0&&n.getFullYear()%100>0)||n.getFullYear()%400===0?366:365; const yearP=((getDayOfYear(n)-1+(dayP/100))/daysInY)*100;
-            
-            document.getElementById('p-day-val').textContent=dayP.toFixed(0)+'%'; document.getElementById('p-day-bar').style.width=dayP+'%';
-            document.getElementById('p-week-val').textContent=weekP.toFixed(0)+'%'; document.getElementById('p-week-bar').style.width=weekP+'%';
-            document.getElementById('p-month-val').textContent=monthP.toFixed(0)+'%'; document.getElementById('p-month-bar').style.width=monthP+'%';
-            document.getElementById('p-year-val').textContent=yearP.toFixed(0)+'%'; document.getElementById('p-year-bar').style.width=yearP+'%';
-        }
         updateTime();
     </script>
 </body>
