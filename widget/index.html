@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Dashboard Hub v4.9</title>
+    <title>Dashboard Hub v5.1</title>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
     <style>
         body, html { margin: 0; padding: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; font-family: "Space Grotesk", sans-serif; background-color: #000; overflow: hidden; user-select: none; -webkit-user-select: none; }
@@ -12,41 +12,46 @@
         .bg-video { position: absolute; top: 50%; left: 50%; width: 100.5%; height: 100.5%; object-fit: cover; transform: translate(-50%, -50%); opacity: 0; transition: opacity 0.8s ease; }
         .bg-video.active { opacity: 1; }
 
-        .widget { position: relative; z-index: 10; width: 400px; min-height: 420px; background: rgba(0, 0, 0, 0.4); -webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px); border-radius: 32px; border: 1px solid rgba(255, 255, 255, 0.1); color: white; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.5); padding: 30px 30px 20px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; }
+        /* Идентичный размер для всех вкладок */
+        .widget { position: relative; z-index: 10; width: 400px; height: 420px; background: rgba(0, 0, 0, 0.4); -webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px); border-radius: 32px; border: 1px solid rgba(255, 255, 255, 0.1); color: white; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.5); padding: 30px 30px 20px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; }
         
-        .tabs { display: flex; justify-content: center; gap: 40px; margin-bottom: 20px; }
+        .tabs { display: flex; justify-content: center; gap: 40px; margin-bottom: 10px; flex-shrink: 0; }
         .tab-icon { cursor: pointer; width: 22px; height: 22px; fill: white; opacity: 0.25; transition: all 0.3s; -webkit-tap-highlight-color: transparent; }
         .tab-icon.active { opacity: 1; filter: drop-shadow(0 0 8px white); }
-        .view { display: none; flex-grow: 1; }
-        .view.active { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; }
-
-        .time-text { font-size: 72px; font-weight: 700; letter-spacing: 2px; margin-bottom: 30px; line-height: 1; }
         
+        .view { display: none; height: 100%; flex-direction: column; align-items: center; justify-content: center; width: 100%; overflow: hidden; }
+        .view.active { display: flex; }
+
+        /* Уменьшенный шрифт времени */
+        .time-text, .time-input { font-size: 60px; font-weight: 700; letter-spacing: 2px; line-height: 1; margin-bottom: 25px; }
+        .time-input { background: transparent; border: none; color: white; font-family: inherit; width: 130px; text-align: center; outline: none; -webkit-tap-highlight-color: transparent; }
+
         .prog-row { width: 90%; margin-bottom: 15px; }
         .prog-info { display: flex; justify-content: space-between; font-size: 10px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; opacity: 0.6; }
         .prog-bar-bg { width: 100%; height: 4px; background: rgba(255, 255, 255, 0.1); border-radius: 10px; overflow: hidden; }
         .prog-bar-fill { height: 100%; background: #fff; width: 0%; transition: width 0.5s ease; box-shadow: 0 0 8px rgba(255,255,255,0.4); }
 
-        .time-display { display: flex; justify-content: center; align-items: center; gap: 2px; margin-bottom: 25px; }
-        .time-input { background: transparent; border: none; color: white; font-family: inherit; font-size: 64px; font-weight: 700; width: 120px; text-align: center; outline: none; -webkit-tap-highlight-color: transparent; -moz-appearance: textfield; }
-        .progress-container { width: 100%; height: 3px; background: rgba(255, 255, 255, 0.1); border-radius: 10px; margin-bottom: 25px; overflow: hidden; }
+        .progress-container { width: 90%; height: 4px; background: rgba(255, 255, 255, 0.1); border-radius: 10px; margin-bottom: 20px; overflow: hidden; }
         .progress-bar { height: 100%; background: #fff; width: 100%; transition: width 1s linear; }
-        .presets { display: flex; justify-content: center; gap: 12px; margin-bottom: 25px; width: 100%; }
+        
+        .presets { display: flex; justify-content: center; gap: 12px; margin-bottom: 20px; width: 100%; }
         .preset-btn { width: 34px; height: 34px; border-radius: 50%; border: 1px solid rgba(255, 255, 255, 0.15); background: rgba(255, 255, 255, 0.05); color: white; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; cursor: pointer; -webkit-tap-highlight-color: transparent; }
-        .controls { display: flex; justify-content: center; gap: 15px; margin-bottom: 10px; }
+        
+        .controls { display: flex; justify-content: center; gap: 15px; }
         button { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.1); color: white; padding: 10px 22px; border-radius: 14px; font-family: inherit; text-transform: uppercase; letter-spacing: 2px; font-size: 10px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
         .btn-start { background: white; color: black; font-weight: 700; border: none; }
 
-        .selector-label { font-size: 11px; text-transform: uppercase; letter-spacing: 3px; opacity: 0.4; margin: 15px 0 10px; }
-        .selector-group { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 10px; width: 100%; }
+        .selector-label { font-size: 11px; text-transform: uppercase; letter-spacing: 3px; opacity: 0.4; margin-bottom: 12px; }
+        .selector-group { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 25px; width: 100%; }
         .selector-item { padding: 8px 16px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1); background: rgba(255, 255, 255, 0.05); font-size: 11px; cursor: pointer; transition: all 0.3s; color: rgba(255, 255, 255, 0.5); text-transform: uppercase; -webkit-tap-highlight-color: transparent; }
         .selector-item.active { background: rgba(255, 255, 255, 0.15); border-color: rgba(255, 255, 255, 0.5); color: white; box-shadow: 0 0 10px rgba(255, 255, 255, 0.2); }
 
-        .quote-container { font-size: 15px; font-style: italic; margin-top: 10px; line-height: 1.6; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.15); min-height: 45px; display: flex; align-items: center; justify-content: center; color: #fff; }
+        .quote-container { font-size: 15px; font-style: italic; margin-top: 10px; line-height: 1.6; padding-top: 15px; border-top: 1px solid rgba(255, 255, 255, 0.15); min-height: 45px; display: flex; align-items: center; justify-content: center; color: #fff; flex-shrink: 0; }
         
         @keyframes finishPulse { 0%, 100% { box-shadow: 0 0 20px rgba(255,255,255,0.1); } 50% { box-shadow: 0 0 60px rgba(255,255,255,0.4); border-color: rgba(255,255,255,0.4); } }
         .widget.pulse-active { animation: finishPulse 2s infinite; }
         input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        input[type=number] { -moz-appearance: textfield; }
     </style>
 </head>
 <body>
@@ -70,7 +75,6 @@
 
         <div id="view-clock" class="view active">
             <div class="time-text" id="time-text">00:00:00</div>
-            
             <div class="prog-row"><div class="prog-info"><span>Day</span><span id="p-day-val">0%</span></div><div class="prog-bar-bg"><div id="p-day-bar" class="prog-bar-fill"></div></div></div>
             <div class="prog-row"><div class="prog-info"><span>Week</span><span id="p-week-val">0%</span></div><div class="prog-bar-bg"><div id="p-week-bar" class="prog-bar-fill"></div></div></div>
             <div class="prog-row"><div class="prog-info"><span>Month</span><span id="p-month-val">0%</span></div><div class="prog-bar-bg"><div id="p-month-bar" class="prog-bar-fill"></div></div></div>
