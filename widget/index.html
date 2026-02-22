@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dashboard Hub v2</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+    <style>
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; font-family: "Space Grotesk", sans-serif; background-color: #000; overflow: hidden; user-select: none; -webkit-user-select: none; }
+        .bg-photo { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url("background.jpg") center center / cover no-repeat; z-index: 1; }
+        .video-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 2; pointer-events: none; }
+        .bg-video { position: absolute; top: 50%; left: 50%; width: 102%; height: 102%; object-fit: cover; transform: translate(-50%, -50%); opacity: 0; transition: opacity 0.5s ease; }
+        .bg-video.active { opacity: 1; }
+        .widget { position: relative; z-index: 10; width: 320px; background: rgba(0, 0, 0, 0.4); -webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px); border-radius: 24px; border: 1px solid rgba(255, 255, 255, 0.1); color: white; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.5); padding: 25px; }
+        .tabs { display: flex; justify-content: center; gap: 30px; margin-bottom: 25px; }
+        .tab-icon { cursor: pointer; width: 24px; height: 24px; fill: white; opacity: 0.3; transition: all 0.3s ease; }
+        .tab-icon.active { opacity: 1; filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.8)); }
+        .view { display: none; }
+        .view.active { display: block; }
+        .day { font-size: 18px; text-transform: uppercase; letter-spacing: 4px; margin-bottom: 5px; opacity: 0.8; }
+        .time { font-size: 48px; font-weight: 700; letter-spacing: 2px; margin: 10px 0; }
+        .time span { cursor: pointer; transition: transform 0.1s; display: inline-block; }
+        .quote-container { font-size: 14px; font-style: italic; opacity: 0.7; margin-top: 20px; line-height: 1.4; }
+        .time-display { display: flex; justify-content: center; align-items: center; font-size: 56px; font-weight: 700; margin-bottom: 20px; }
+        .time-input { background: transparent; border: none; color: white; font-family: inherit; font-size: 56px; font-weight: 700; width: 80px; text-align: center; outline: none; }
+        .progress-container { width: 100%; height: 4px; background: rgba(255, 255, 255, 0.1); border-radius: 10px; margin-bottom: 25px; overflow: hidden; }
+        .progress-bar { height: 100%; background: #ffffff; box-shadow: 0 0 15px rgba(255, 255, 255, 0.8); width: 100%; transition: width 1s linear; }
+        .controls { display: flex; justify-content: center; gap: 12px; }
+        button { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.15); color: white; padding: 10px 20px; border-radius: 12px; font-family: inherit; text-transform: uppercase; letter-spacing: 2px; font-size: 10px; cursor: pointer; transition: all 0.2s; }
+        .btn-start { background: white; color: black; font-weight: 700; border: none; }
+        @keyframes finishPulse { 0%, 100% { box-shadow: 0 0 15px rgba(255, 255, 255, 0.2); border-color: rgba(255, 255, 255, 0.1); } 50% { box-shadow: 0 0 40px rgba(255, 255, 255, 0.6); border-color: rgba(255, 255, 255, 0.5); } }
+        .widget.pulse-active { animation: finishPulse 2s infinite ease-in-out; }
+        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    </style>
+</head>
+<body>
+    <div class="bg-photo"></div>
+    <div class="video-container">
+        <video id="vid-hours" class="bg-video" src="rainy_caffee.mp4" loop muted playsinline></video>
+        <video id="vid-minutes" class="bg-video" src="rainy_shop.mp4" loop muted playsinline></video>
+        <video id="vid-seconds" class="bg-video" src="sunny_yard.mp4" loop muted playsinline></video>
+    </div>
+    
+    <audio id="aud-hours" src="rainy_caffee.mp3" loop preload="auto"></audio>
+    <audio id="aud-minutes" src="rainy_shop.mp3" loop preload="auto"></audio>
+    <audio id="aud-seconds" src="sunny_yard.mp3" loop preload="auto"></audio>
+    <audio id="finishSound" src="notification.mp3" preload="auto"></audio>
+
+    <div class="widget" id="mainWidget">
+        <div class="tabs">
+            <svg class="tab-icon active" id="tab-clock" onclick="switchTab('clock')" viewBox="0 0 24 24"><path d="M12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2zm0 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16zm1 8h4v2h-6V7h2v5z"/></svg>
+            <svg class="tab-icon" id="tab-timer" onclick="switchTab('timer')" viewBox="0 0 24 24"><path d="M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm0 2C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm1-11h4v2h-6V7h2v4zM15 1H9v2h6V1z"/></svg>
+        </div>
+        <div id="view-clock" class="view active">
+            <div class="day" id="day"></div>
+            <div class="time">
+                <span id="time-hours" onclick="toggleAtmosphere('hours')">00</span>:<span id="time-minutes" onclick="toggleAtmosphere('minutes')">00</span>:<span id="time-seconds" onclick="toggleAtmosphere('seconds')">00</span>
+            </div>
+            <div class="quote-container" id="quote"></div>
+        </div>
+        <div id="view-timer" class="view">
+            <div class="time-display"><input type="number" id="min" class="time-input" value="60">:<input type="number" id="sec" class="time-input" value="00"></div>
+            <div class="progress-container"><div id="bar" class="progress-bar"></div></div>
+            <div class="controls"><button class="btn-start" id="startBtn" onclick="toggleTimer()">Start</button><button onclick="resetTimer()">Reset</button></div>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tab) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.querySelectorAll('.tab-icon').forEach(i => i.classList.remove('active'));
+            document.getElementById('view-' + tab).classList.add('active');
+            document.getElementById('tab-' + tab).classList.add('active');
+        }
+        function updateTime() {
+            const now = new Date();
+            document.getElementById('day').textContent = now.toLocaleDateString('en-US', {weekday: 'long'});
+            document.getElementById('time-hours').textContent = String(now.getHours()).padStart(2, '0');
+            document.getElementById('time-minutes').textContent = String(now.getMinutes()).padStart(2, '0');
+            document.getElementById('time-seconds').textContent = String(now.getSeconds()).padStart(2, '0');
+        }
+        setInterval(updateTime, 1000); updateTime();
+
+        const vids = { hours: document.getElementById('vid-hours'), minutes: document.getElementById('vid-minutes'), seconds: document.getElementById('vid-seconds') };
+        const auds = { hours: document.getElementById('aud-hours'), minutes: document.getElementById('aud-minutes'), seconds: document.getElementById('aud-seconds') };
+        let activeKey = null;
+
+        function toggleAtmosphere(key) {
+            if (activeKey) { 
+                vids[activeKey].pause(); vids[activeKey].classList.remove('active'); 
+                auds[activeKey].pause(); auds[activeKey].currentTime = 0;
+            }
+            if (activeKey !== key) { 
+                vids[key].play(); vids[key].classList.add('active'); 
+                auds[key].play();
+                activeKey = key; 
+            } else { activeKey = null; }
+        }
+
+        const quotes = ["Action is the key to success.", "Focus on being productive, not busy.", "The future depends on what you do today."];
+        document.getElementById('quote').textContent = quotes[Math.floor(Math.random() * quotes.length)];
+
+        let timer = null, totalS = 0, remainS = 0, running = false;
+        const minI = document.getElementById('min'), secI = document.getElementById('sec'), startB = document.getElementById('startBtn'), bar = document.getElementById('bar'), sound = document.getElementById('finishSound'), mainW = document.getElementById('mainWidget');
+        
+        function toggleTimer() {
+            mainW.classList.remove('pulse-active');
+            if (running) { clearInterval(timer); startB.textContent = 'Start'; running = false; } 
+            else {
+                if (remainS <= 0) { remainS = (parseInt(minI.value) || 0) * 60 + (parseInt(secI.value) || 0); totalS = remainS; }
+                if (remainS > 0) {
+                    running = true; startB.textContent = 'Pause';
+                    timer = setInterval(() => {
+                        remainS--; 
+                        minI.value = String(Math.floor(remainS / 60)).padStart(2, '0');
+                        secI.value = String(remainS % 60).padStart(2, '0');
+                        bar.style.width = (remainS / totalS * 100) + '%';
+                        if (remainS <= 0) { clearInterval(timer); sound.play(); mainW.classList.add('pulse-active'); resetTimer(true); }
+                    }, 1000);
+                }
+            }
+        }
+        function resetTimer(auto = false) {
+            clearInterval(timer); running = false; remainS = 0; totalS = 0;
+            startB.textContent = 'Start'; bar.style.width = '100%';
+            minI.value = "60"; secI.value = "00";
+            if (!auto) mainW.classList.remove('pulse-active');
+        }
+    </script>
+</body>
+</html>
