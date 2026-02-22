@@ -12,7 +12,6 @@
         .bg-video { position: absolute; top: 50%; left: 50%; width: 100.5%; height: 100.5%; object-fit: cover; transform: translate(-50%, -50%); opacity: 0; transition: opacity 0.8s ease; }
         .bg-video.active { opacity: 1; }
 
-        /* Идентичный размер для всех вкладок */
         .widget { position: relative; z-index: 10; width: 400px; height: 420px; background: rgba(0, 0, 0, 0.4); -webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px); border-radius: 32px; border: 1px solid rgba(255, 255, 255, 0.1); color: white; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.5); padding: 30px 30px 20px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; }
         
         .tabs { display: flex; justify-content: center; gap: 40px; margin-bottom: 10px; flex-shrink: 0; }
@@ -22,9 +21,10 @@
         .view { display: none; height: 100%; flex-direction: column; align-items: center; justify-content: center; width: 100%; overflow: hidden; }
         .view.active { display: flex; }
 
-        /* Уменьшенный шрифт времени */
-        .time-text, .time-input { font-size: 60px; font-weight: 700; letter-spacing: 2px; line-height: 1; margin-bottom: 25px; }
+        .time-display { display: flex; justify-content: center; align-items: center; }
+        .time-text, .time-input, .time-separator { font-size: 60px; font-weight: 700; letter-spacing: 2px; line-height: 1; margin-bottom: 25px; }
         .time-input { background: transparent; border: none; color: white; font-family: inherit; width: 130px; text-align: center; outline: none; -webkit-tap-highlight-color: transparent; }
+        .time-separator { color: white; width: 20px; text-align: center; transform: translateY(-3px); }
 
         .prog-row { width: 90%; margin-bottom: 15px; }
         .prog-info { display: flex; justify-content: space-between; font-size: 10px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; opacity: 0.6; }
@@ -82,7 +82,7 @@
         </div>
 
         <div id="view-timer" class="view">
-            <div class="time-display"><input type="number" id="min" class="time-input" value="60">:<input type="number" id="sec" class="time-input" value="00"></div>
+            <div class="time-display"><input type="number" id="min" class="time-input" value="60"><span class="time-separator">:</span><input type="number" id="sec" class="time-input" value="00"></div>
             <div class="progress-container"><div id="bar" class="progress-bar"></div></div>
             <div class="presets"><div class="preset-btn" onclick="setPreset(1)">1</div><div class="preset-btn" onclick="setPreset(3)">3</div><div class="preset-btn" onclick="setPreset(5)">5</div><div class="preset-btn" onclick="setPreset(15)">15</div><div class="preset-btn" onclick="setPreset(30)">30</div><div class="preset-btn" onclick="setPreset(60)">60</div></div>
             <div class="controls"><button class="btn-start" id="startBtn" onclick="toggleTimer()">Start</button><button onclick="resetTimer()">Reset</button></div>
