@@ -102,7 +102,7 @@
             <div class="overlay-content">
                 <div class="list-item" onclick="selectAudio('cafe', this)">Rain</div>
                 <div class="list-item" onclick="selectAudio('shop', this)">Fire</div>
-                <div class="list-item" onclick="selectAudio('yard', this)">Lo-fi</div>
+                <div class="list-item" onclick="selectAudio('lofi', this)">Lo-fi</div>
                 <div class="list-item" onclick="selectAudio('cave', this)">Cave</div>
                 <div class="list-item" onclick="selectAudio('medieval-knight', this)">Medieval Knight</div>
             </div>
@@ -150,13 +150,14 @@
         }
 
         function selectVideo(k, element) {
+            const isSame = (activeVid === k);
             if(activeVid) {
                 const prev = document.getElementById('vid-'+activeVid);
                 prev.pause();
                 prev.classList.remove('active');
             }
             document.querySelectorAll('#overlay-video .list-item').forEach(el => el.classList.remove('selected'));
-            if(k !== null) {
+            if(k !== null && !isSame) {
                 const v = document.getElementById('vid-'+k);
                 v.play();
                 v.classList.add('active');
@@ -171,11 +172,12 @@
         }
 
         function selectAudio(k, element) {
+            const isSame = (activeAud === k);
             if(activeAud) {
                 document.getElementById('aud-'+activeAud).pause();
             }
             document.querySelectorAll('#overlay-audio .list-item').forEach(el => el.classList.remove('selected'));
-            if(k !== null) {
+            if(k !== null && !isSame) {
                 document.getElementById('aud-'+k).play();
                 activeAud = k;
                 if(element) element.classList.add('selected');
