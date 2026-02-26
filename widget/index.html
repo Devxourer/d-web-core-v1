@@ -54,34 +54,13 @@
         <video id="vid-cafe" class="bg-video" src="videos/cafe.mp4" loop muted playsinline preload="none"></video>
         <video id="vid-shop" class="bg-video" src="videos/shop.mp4" loop muted playsinline preload="none"></video>
         <video id="vid-yard" class="bg-video" src="videos/yard.mp4" loop muted playsinline preload="none"></video>
-        <video id="vid-cave" class="bg-video" src="videos/cave.mp4" loop muted playsinline preload="none"></video>
-        <video id="vid-hotel" class="bg-video" src="videos/hotel.mp4" loop muted playsinline preload="none"></video>
         <video id="vid-adventure" class="bg-video" src="videos/adventure.mp4" loop muted playsinline preload="none"></video>
-        <video id="vid-autumn" class="bg-video" src="videos/autumn.mp4" loop muted playsinline preload="none"></video>
-        <video id="vid-campfire" class="bg-video" src="videos/campfire.mp4" loop muted playsinline preload="none"></video>
-        <video id="vid-druid" class="bg-video" src="videos/druid.mp4" loop muted playsinline preload="none"></video>
-        <video id="vid-elf" class="bg-video" src="videos/elf.mp4" loop muted playsinline preload="none"></video>
-        <video id="vid-fantasy" class="bg-video" src="videos/fantasy.mp4" loop muted playsinline preload="none"></video>
         <video id="vid-forest" class="bg-video" src="videos/forest.mp4" loop muted playsinline preload="none"></video>
-        <video id="vid-lake" class="bg-video" src="videos/lake.mp4" loop muted playsinline preload="none"></video>
-        <video id="vid-last_druid" class="bg-video" src="videos/last_druid.mp4" loop muted playsinline preload="none"></video>
-        <video id="vid-midnight" class="bg-video" src="videos/midnight.mp4" loop muted playsinline preload="none"></video>
-        <video id="vid-moon" class="bg-video" src="videos/moon.mp4" loop muted playsinline preload="none"></video>
-        <video id="vid-night" class="bg-video" src="videos/night.mp4" loop muted playsinline preload="none"></video>
-        <video id="vid-princess" class="bg-video" src="videos/princess.mp4" loop muted playsinline preload="none"></video>
-        <video id="vid-sea" class="bg-video" src="videos/sea.mp4" loop muted playsinline preload="none"></video>
-        <video id="vid-swamp" class="bg-video" src="videos/swamp.mp4" loop muted playsinline preload="none"></video>
-        <video id="vid-vale" class="bg-video" src="videos/vale.mp4" loop muted playsinline preload="none"></video>
-        <video id="vid-valley" class="bg-video" src="videos/valley.mp4" loop muted playsinline preload="none"></video>
-        <video id="vid-viking" class="bg-video" src="videos/viking.mp4" loop muted playsinline preload="none"></video>
-        <video id="vid-village" class="bg-video" src="videos/village.mp4" loop muted playsinline preload="none"></video>
     </div>
     
-    <audio id="aud-cafe" src="audios/rain.m4a" loop preload="none"></audio>
-    <audio id="aud-shop" src="audios/fire.m4a" loop preload="none"></audio>
-    <audio id="aud-lofi" src="audios/lofi.m4a" loop preload="none"></audio>
-    <audio id="aud-fire-rain" src="audios/fire_rain.m4a" loop preload="none"></audio>
-    <audio id="aud-medieval-knight" src="audios/medieval_knight.m4a" loop preload="none"></audio>
+    <audio id="aud-rain" src="audios/rain.m4a" loop preload="none"></audio>
+    <audio id="aud-fire" src="audios/fire.m4a" loop preload="none"></audio>
+    <audio id="aud-cave" src="audios/cave.m4a" loop preload="none"></audio>
     <audio id="finishSound" src="audios/notification.mp3" preload="none"></audio>
 
     <div class="widget" id="mainWidget">
@@ -111,38 +90,17 @@
                 <div class="list-item" onclick="selectVideo('cafe', this)">Cafe</div>
                 <div class="list-item" onclick="selectVideo('shop', this)">Shop</div>
                 <div class="list-item" onclick="selectVideo('yard', this)">Yard</div>
-                <div class="list-item" onclick="selectVideo('cave', this)">Cave</div>
-                <div class="list-item" onclick="selectVideo('hotel', this)">Hotel</div>
                 <div class="list-item" onclick="selectVideo('adventure', this)">Adventure</div>
-                <div class="list-item" onclick="selectVideo('autumn', this)">Autumn</div>
-                <div class="list-item" onclick="selectVideo('campfire', this)">Campfire</div>
-                <div class="list-item" onclick="selectVideo('druid', this)">Druid</div>
-                <div class="list-item" onclick="selectVideo('elf', this)">Elf</div>
-                <div class="list-item" onclick="selectVideo('fantasy', this)">Fantasy</div>
                 <div class="list-item" onclick="selectVideo('forest', this)">Forest</div>
-                <div class="list-item" onclick="selectVideo('lake', this)">Lake</div>
-                <div class="list-item" onclick="selectVideo('last_druid', this)">Last Druid</div>
-                <div class="list-item" onclick="selectVideo('midnight', this)">Midnight</div>
-                <div class="list-item" onclick="selectVideo('moon', this)">Moon</div>
-                <div class="list-item" onclick="selectVideo('night', this)">Night</div>
-                <div class="list-item" onclick="selectVideo('princess', this)">Princess</div>
-                <div class="list-item" onclick="selectVideo('sea', this)">Sea</div>
-                <div class="list-item" onclick="selectVideo('swamp', this)">Swamp</div>
-                <div class="list-item" onclick="selectVideo('vale', this)">Vale</div>
-                <div class="list-item" onclick="selectVideo('valley', this)">Valley</div>
-                <div class="list-item" onclick="selectVideo('viking', this)">Viking</div>
-                <div class="list-item" onclick="selectVideo('village', this)">Village</div>
             </div>
         </div>
 
         <div class="overlay" id="overlay-audio">
             <div class="overlay-title">Background Audio</div>
             <div class="overlay-content">
-                <div class="list-item" onclick="selectAudio('cafe', this)">Rain</div>
-                <div class="list-item" onclick="selectAudio('shop', this)">Fire</div>
-                <div class="list-item" onclick="selectAudio('lofi', this)">Lo-fi</div>
-                <div class="list-item" onclick="selectAudio('fire-rain', this)">Fire & Rain</div>
-                <div class="list-item" onclick="selectAudio('medieval-knight', this)">Medieval Knight</div>
+                <div class="list-item" onclick="selectAudio('rain', this)">Rain</div>
+                <div class="list-item" onclick="selectAudio('fire', this)">Fire</div>
+                <div class="list-item" onclick="selectAudio('cave', this)">Cave</div>
             </div>
         </div>
 
