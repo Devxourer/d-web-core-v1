@@ -17,6 +17,7 @@
         .tab-icon.active { opacity: 1; filter: drop-shadow(0 0 8px white); }
         .view { display: none; height: 100%; flex-direction: column; align-items: center; justify-content: center; width: 100%; overflow: hidden; }
         .view.active { display: flex; }
+        
         .date-day { font-size: 22px; text-transform: uppercase; letter-spacing: 4px; font-weight: 500; margin-bottom: 6px; }
         .date-full { font-size: 16px; font-weight: 300; letter-spacing: 1px; margin-bottom: 25px; opacity: 0.9; }
         .time-display { display: flex; justify-content: center; align-items: center; }
@@ -31,11 +32,24 @@
         .controls { display: flex; justify-content: center; gap: 15px; }
         button { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.1); color: white; padding: 10px 22px; border-radius: 14px; font-family: inherit; text-transform: uppercase; letter-spacing: 2px; font-size: 10px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
         .btn-start { background: white; color: black; font-weight: 700; border: none; }
-        .selector-label { font-size: 11px; text-transform: uppercase; letter-spacing: 3px; opacity: 0.4; margin-bottom: 12px; }
-        .selector-group { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 25px; width: 100%; }
-        .selector-item { padding: 8px 16px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1); background: rgba(255, 255, 255, 0.05); font-size: 11px; cursor: pointer; transition: all 0.3s; color: rgba(255, 255, 255, 0.5); text-transform: uppercase; -webkit-tap-highlight-color: transparent; }
-        .selector-item.active { background: rgba(255, 255, 255, 0.15); border-color: rgba(255, 255, 255, 0.5); color: white; box-shadow: 0 0 10px rgba(255, 255, 255, 0.2); }
+
+        .selector-label { font-size: 11px; text-transform: uppercase; letter-spacing: 3px; opacity: 0.4; margin-bottom: 10px; }
+        .dropdown-container { position: relative; width: 80%; margin-bottom: 25px; }
+        .dropdown-btn { display: flex; justify-content: space-between; align-items: center; padding: 12px 18px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1); background: rgba(255, 255, 255, 0.05); font-size: 12px; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: background 0.3s; color: rgba(255, 255, 255, 0.8); -webkit-tap-highlight-color: transparent; }
+        .dropdown-btn:hover { background: rgba(255, 255, 255, 0.1); }
+        .dropdown-icon { width: 16px; height: 16px; fill: currentColor; opacity: 0.6; transition: transform 0.3s; }
+        .dropdown-btn.open .dropdown-icon { transform: rotate(180deg); }
+        .dropdown-list { position: absolute; top: calc(100% + 5px); left: 0; right: 0; background: rgba(20, 20, 20, 0.85); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1); max-height: 160px; overflow-y: auto; z-index: 100; opacity: 0; pointer-events: none; transform: translateY(-10px); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: flex; flex-direction: column; padding: 5px; box-sizing: border-box; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .dropdown-list.show { opacity: 1; pointer-events: auto; transform: translateY(0); }
+        .dropdown-item { padding: 12px 15px; border-radius: 8px; font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; cursor: pointer; text-align: left; color: rgba(255, 255, 255, 0.6); transition: all 0.2s; }
+        .dropdown-item:hover, .dropdown-item.selected { background: rgba(255, 255, 255, 0.15); color: white; }
+        
+        .dropdown-list::-webkit-scrollbar { width: 4px; }
+        .dropdown-list::-webkit-scrollbar-track { background: transparent; }
+        .dropdown-list::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 4px; }
+
         .quote-container { font-size: 17px; font-style: italic; margin-top: 10px; line-height: 1.6; padding-top: 15px; border-top: 1px solid rgba(255, 255, 255, 0.15); min-height: 45px; display: flex; align-items: center; justify-content: center; color: #fff; flex-shrink: 0; background: rgba(0,0,0,0.2); border-radius: 8px; padding: 15px; border: none; }
+        
         @keyframes finishPulse { 0%, 100% { box-shadow: 0 0 20px rgba(255,255,255,0.1); } 50% { box-shadow: 0 0 60px rgba(255,255,255,0.4); border-color: rgba(255,255,255,0.4); } }
         .widget.pulse-active { animation: finishPulse 2s infinite; }
         input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
@@ -51,6 +65,7 @@
         <video id="vid-cave" class="bg-video" src="videos/cave.mp4" loop muted playsinline></video>
         <video id="vid-room" class="bg-video" src="videos/room.mp4" loop muted playsinline></video>
     </div>
+    
     <audio id="aud-cafe" src="audios/rain.m4a" loop></audio>
     <audio id="aud-shop" src="audios/fire.m4a" loop></audio>
     <audio id="aud-yard" src="audios/lofi.m4a" loop></audio>
@@ -78,18 +93,33 @@
 
         <div id="view-media" class="view">
             <div class="selector-label">Visual Atmosphere</div>
-            <div class="selector-group">
-                <div class="selector-item" id="v-cafe" onclick="toggleVideo('cafe')">Cafe</div>
-                <div class="selector-item" id="v-shop" onclick="toggleVideo('shop')">Shop</div>
-                <div class="selector-item" id="v-yard" onclick="toggleVideo('yard')">Yard</div>
-                <div class="selector-item" id="v-cave" onclick="toggleVideo('cave')">Cave</div>
-                <div class="selector-item" id="v-room" onclick="toggleVideo('room')">Room</div>
+            <div class="dropdown-container">
+                <div class="dropdown-btn" id="video-btn" onclick="toggleDropdown('video-list')">
+                    <span id="video-selected-text">Off</span>
+                    <svg class="dropdown-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                </div>
+                <div class="dropdown-list" id="video-list">
+                    <div class="dropdown-item selected" onclick="selectVideo(null, 'Off')">Off</div>
+                    <div class="dropdown-item" onclick="selectVideo('cafe', 'Cafe')">Cafe</div>
+                    <div class="dropdown-item" onclick="selectVideo('shop', 'Shop')">Shop</div>
+                    <div class="dropdown-item" onclick="selectVideo('yard', 'Yard')">Yard</div>
+                    <div class="dropdown-item" onclick="selectVideo('cave', 'Cave')">Cave</div>
+                    <div class="dropdown-item" onclick="selectVideo('room', 'Room')">Room</div>
+                </div>
             </div>
+
             <div class="selector-label">Background Audio</div>
-            <div class="selector-group">
-                <div class="selector-item" id="a-cafe" onclick="toggleAudio('cafe')">Rain</div>
-                <div class="selector-item" id="a-shop" onclick="toggleAudio('shop')">Fire</div>
-                <div class="selector-item" id="a-yard" onclick="toggleAudio('yard')">Lo-fi</div>
+            <div class="dropdown-container">
+                <div class="dropdown-btn" id="audio-btn" onclick="toggleDropdown('audio-list')">
+                    <span id="audio-selected-text">Off</span>
+                    <svg class="dropdown-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                </div>
+                <div class="dropdown-list" id="audio-list">
+                    <div class="dropdown-item selected" onclick="selectAudio(null, 'Off')">Off</div>
+                    <div class="dropdown-item" onclick="selectAudio('cafe', 'Rain')">Rain</div>
+                    <div class="dropdown-item" onclick="selectAudio('shop', 'Fire')">Fire</div>
+                    <div class="dropdown-item" onclick="selectAudio('yard', 'Lo-fi')">Lo-fi</div>
+                </div>
             </div>
         </div>
 
@@ -109,14 +139,75 @@
             document.getElementById('date-day').textContent = daysOfWeek[n.getDay()];
             document.getElementById('date-full').textContent = monthNames[n.getMonth()] + " " + n.getDate() + ", " + n.getFullYear();
         }
-        setInterval(updateTime,1000);
+        setInterval(updateTime,1000); updateTime();
         
         function setRandomQuote(){document.getElementById("quote").textContent=quotes[Math.floor(Math.random()*quotes.length)]}
-        setInterval(setRandomQuote,60000);setRandomQuote();
+        setInterval(setRandomQuote,60000); setRandomQuote();
         
-        let activeVid=null, activeAud=null;
-        function toggleVideo(k){const v=document.getElementById('vid-'+k);const item=document.getElementById('v-'+k);if(activeVid&&activeVid!==k){document.getElementById('vid-'+activeVid).pause();document.getElementById('vid-'+activeVid).classList.remove('active');document.getElementById('v-'+activeVid).classList.remove('active')}if(activeVid===k){v.pause();v.classList.remove('active');item.classList.remove('active');activeVid=null}else{v.play();v.classList.add('active');item.classList.add('active');activeVid=k}}
-        function toggleAudio(k){const a=document.getElementById('aud-'+k);const item=document.getElementById('a-'+k);if(activeAud&&activeAud!==k){document.getElementById('aud-'+activeAud).pause();document.getElementById('a-'+activeAud).classList.remove('active')}if(activeAud===k){a.pause();item.classList.remove('active');activeAud=null}else{a.play();item.classList.add('active');activeAud=k}}
+        let activeVid = null, activeAud = null;
+
+        function toggleDropdown(listId) {
+            const list = document.getElementById(listId);
+            const btn = list.previousElementSibling;
+            
+            document.querySelectorAll('.dropdown-list').forEach(el => {
+                if (el.id !== listId) {
+                    el.classList.remove('show');
+                    el.previousElementSibling.classList.remove('open');
+                }
+            });
+            
+            list.classList.toggle('show');
+            btn.classList.toggle('open');
+        }
+
+        window.onclick = function(event) {
+            if (!event.target.closest('.dropdown-container')) {
+                document.querySelectorAll('.dropdown-list').forEach(el => el.classList.remove('show'));
+                document.querySelectorAll('.dropdown-btn').forEach(btn => btn.classList.remove('open'));
+            }
+        }
+
+        function updateSelectionUI(listId, selectedTextId, selectedName, clickedItem) {
+            document.getElementById(selectedTextId).textContent = selectedName;
+            const list = document.getElementById(listId);
+            list.querySelectorAll('.dropdown-item').forEach(item => item.classList.remove('selected'));
+            clickedItem.classList.add('selected');
+            list.classList.remove('show');
+            list.previousElementSibling.classList.remove('open');
+        }
+
+        function selectVideo(k, name) {
+            updateSelectionUI('video-list', 'video-selected-text', name, event.target);
+            
+            if(activeVid) {
+                const prev = document.getElementById('vid-'+activeVid);
+                prev.pause();
+                prev.classList.remove('active');
+            }
+            if(k !== null) {
+                const v = document.getElementById('vid-'+k);
+                v.play();
+                v.classList.add('active');
+                activeVid = k;
+            } else {
+                activeVid = null;
+            }
+        }
+
+        function selectAudio(k, name) {
+            updateSelectionUI('audio-list', 'audio-selected-text', name, event.target);
+            
+            if(activeAud) {
+                document.getElementById('aud-'+activeAud).pause();
+            }
+            if(k !== null) {
+                document.getElementById('aud-'+k).play();
+                activeAud = k;
+            } else {
+                activeAud = null;
+            }
+        }
         
         let timer=null,totalS=0,remainS=0,running=false;
         const minI=document.getElementById('min'),secI=document.getElementById('sec'),startB=document.getElementById('startBtn'),bar=document.getElementById('bar'),sound=document.getElementById('finishSound'),mainW=document.getElementById('mainWidget');
@@ -141,11 +232,8 @@
             if (state.running) {
                 const passed = Math.floor((Date.now() - state.ts) / 1000);
                 remainS = state.remainS - passed;
-                if (remainS > 0) {
-                    startLogic();
-                } else {
-                    resetTimer(true);
-                }
+                if (remainS > 0) startLogic();
+                else resetTimer(true);
             } else {
                 remainS = state.remainS;
                 updateUI();
@@ -158,14 +246,9 @@
             running = true;
             startB.textContent = 'Pause';
             timer = setInterval(() => {
-                remainS--;
-                updateUI();
-                saveState();
+                remainS--; updateUI(); saveState();
                 if (remainS <= 0) {
-                    clearInterval(timer);
-                    sound.play();
-                    mainW.classList.add('pulse-active');
-                    resetTimer(true);
+                    clearInterval(timer); sound.play(); mainW.classList.add('pulse-active'); resetTimer(true);
                 }
             }, 1000);
         }
@@ -173,10 +256,7 @@
         function toggleTimer() {
             mainW.classList.remove('pulse-active');
             if (running) {
-                clearInterval(timer);
-                startB.textContent = 'Start';
-                running = false;
-                saveState();
+                clearInterval(timer); startB.textContent = 'Start'; running = false; saveState();
             } else {
                 if (remainS <= 0) {
                     remainS = (parseInt(minI.value) || 0) * 60 + (parseInt(secI.value) || 0);
@@ -187,21 +267,11 @@
         }
 
         function resetTimer(auto=false) {
-            clearInterval(timer);
-            running = false;
-            remainS = 0;
-            totalS = 0;
-            startB.textContent = 'Start';
-            bar.style.width = '100%';
-            if (!auto) {
-                minI.value = "60";
-                secI.value = "00";
-                mainW.classList.remove('pulse-active');
-            }
+            clearInterval(timer); running = false; remainS = 0; totalS = 0; startB.textContent = 'Start'; bar.style.width = '100%';
+            if (!auto) { minI.value = "60"; secI.value = "00"; mainW.classList.remove('pulse-active'); }
             localStorage.removeItem('timer_state');
         }
         
-        updateTime();
         loadState();
     </script>
 </body>
