@@ -12,12 +12,15 @@
         .bg-video { position: absolute; top: 50%; left: 50%; width: 100.5%; height: 100.5%; object-fit: cover; transform: translate(-50%, -50%); opacity: 0; transition: opacity 0.8s ease; }
         .bg-video.active { opacity: 1; }
         .widget { position: relative; z-index: 10; width: 400px; height: 420px; background: rgba(0, 0, 0, 0.4); -webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px); border-radius: 0; border: 1px solid rgba(255, 255, 255, 0.1); color: white; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.5); padding: 30px 30px 20px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; }
-        .tabs { display: flex; justify-content: center; gap: 40px; margin-bottom: 10px; flex-shrink: 0; }
+        
+        .tabs { display: flex; justify-content: center; gap: 35px; margin-bottom: 10px; flex-shrink: 0; position: relative; z-index: 30; }
         .tab-icon { cursor: pointer; width: 22px; height: 22px; fill: white; opacity: 0.25; transition: all 0.3s; -webkit-tap-highlight-color: transparent; }
         .tab-icon.active { opacity: 1; filter: drop-shadow(0 0 8px white); }
+        
         .view { display: none; height: 100%; flex-direction: column; align-items: center; justify-content: center; width: 100%; overflow: hidden; }
         .view.active { display: flex; }
         
+        /* Typography & Timer Styles */
         .date-day { font-size: 22px; text-transform: uppercase; letter-spacing: 4px; font-weight: 500; margin-bottom: 6px; }
         .date-full { font-size: 16px; font-weight: 300; letter-spacing: 1px; margin-bottom: 25px; opacity: 0.9; }
         .time-display { display: flex; justify-content: center; align-items: center; }
@@ -33,22 +36,22 @@
         button { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.1); color: white; padding: 10px 22px; border-radius: 14px; font-family: inherit; text-transform: uppercase; letter-spacing: 2px; font-size: 10px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
         .btn-start { background: white; color: black; font-weight: 700; border: none; }
 
-        .selector-label { font-size: 11px; text-transform: uppercase; letter-spacing: 3px; opacity: 0.4; margin-bottom: 10px; }
-        .dropdown-container { position: relative; width: 80%; margin-bottom: 25px; }
-        .dropdown-btn { display: flex; justify-content: space-between; align-items: center; padding: 12px 18px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1); background: rgba(255, 255, 255, 0.05); font-size: 12px; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: background 0.3s; color: rgba(255, 255, 255, 0.8); -webkit-tap-highlight-color: transparent; }
-        .dropdown-btn:hover { background: rgba(255, 255, 255, 0.1); }
-        .dropdown-icon { width: 16px; height: 16px; fill: currentColor; opacity: 0.6; transition: transform 0.3s; }
-        .dropdown-btn.open .dropdown-icon { transform: rotate(180deg); }
-        .dropdown-list { position: absolute; top: calc(100% + 5px); left: 0; right: 0; background: rgba(20, 20, 20, 0.85); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1); max-height: 160px; overflow-y: auto; z-index: 100; opacity: 0; pointer-events: none; transform: translateY(-10px); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: flex; flex-direction: column; padding: 5px; box-sizing: border-box; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .dropdown-list.show { opacity: 1; pointer-events: auto; transform: translateY(0); }
-        .dropdown-item { padding: 12px 15px; border-radius: 8px; font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; cursor: pointer; text-align: left; color: rgba(255, 255, 255, 0.6); transition: all 0.2s; }
-        .dropdown-item:hover, .dropdown-item.selected { background: rgba(255, 255, 255, 0.15); color: white; }
+        /* Overlays for Media */
+        .overlay { position: absolute; top: 65px; bottom: 85px; left: 20px; right: 20px; background: rgba(15, 15, 15, 0.85); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; z-index: 20; display: flex; flex-direction: column; overflow: hidden; opacity: 0; pointer-events: none; transform: scale(0.95); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .overlay.show { opacity: 1; pointer-events: auto; transform: scale(1); }
+        .overlay-title { font-size: 10px; text-transform: uppercase; letter-spacing: 3px; opacity: 0.5; padding: 15px; text-align: center; border-bottom: 1px solid rgba(255, 255, 255, 0.05); flex-shrink: 0; }
+        .overlay-content { overflow-y: auto; flex-grow: 1; padding: 5px; }
         
-        .dropdown-list::-webkit-scrollbar { width: 4px; }
-        .dropdown-list::-webkit-scrollbar-track { background: transparent; }
-        .dropdown-list::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 4px; }
+        .list-item { padding: 16px; font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: rgba(255, 255, 255, 0.5); cursor: pointer; transition: all 0.2s; border-radius: 8px; margin-bottom: 2px; text-align: center; }
+        .list-item:hover { color: rgba(255, 255, 255, 0.9); background: rgba(255, 255, 255, 0.05); }
+        .list-item.selected { color: white; font-weight: bold; background: rgba(255, 255, 255, 0.1); box-shadow: 0 0 10px rgba(255, 255, 255, 0.05); }
 
-        .quote-container { font-size: 17px; font-style: italic; margin-top: 10px; line-height: 1.6; padding-top: 15px; border-top: 1px solid rgba(255, 255, 255, 0.15); min-height: 45px; display: flex; align-items: center; justify-content: center; color: #fff; flex-shrink: 0; background: rgba(0,0,0,0.2); border-radius: 8px; padding: 15px; border: none; }
+        /* Custom scrollbar for lists */
+        .overlay-content::-webkit-scrollbar { width: 4px; }
+        .overlay-content::-webkit-scrollbar-track { background: transparent; }
+        .overlay-content::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 4px; }
+
+        .quote-container { position: relative; z-index: 30; font-size: 17px; font-style: italic; margin-top: 10px; line-height: 1.6; padding-top: 15px; border-top: 1px solid rgba(255, 255, 255, 0.15); min-height: 45px; display: flex; align-items: center; justify-content: center; color: #fff; flex-shrink: 0; background: rgba(0,0,0,0.2); border-radius: 8px; padding: 15px; border: none; }
         
         @keyframes finishPulse { 0%, 100% { box-shadow: 0 0 20px rgba(255,255,255,0.1); } 50% { box-shadow: 0 0 60px rgba(255,255,255,0.4); border-color: rgba(255,255,255,0.4); } }
         .widget.pulse-active { animation: finishPulse 2s infinite; }
@@ -73,9 +76,10 @@
 
     <div class="widget" id="mainWidget">
         <div class="tabs">
-            <svg class="tab-icon active" id="tab-clock" onclick="switchTab('clock')" viewBox="0 0 24 24"><path d="M12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2zm0 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16zm1 8h4v2h-6V7h2v5z"/></svg>
-            <svg class="tab-icon" id="tab-timer" onclick="switchTab('timer')" viewBox="0 0 24 24"><path d="M6 2h12v2H6V2zm11.5 7.6l1.4-1.4L20.3 9.6l-1.4 1.4c.7 1.1 1.1 2.4 1.1 3.8 0 3.9-3.1 7-7 7s-7-3.1-7-7c0-1.4.4-2.7 1.1-3.8L5.7 9.6l1.4-1.4 1.4 1.4c1.1-.7 2.4-1.1 3.8-1.1 1.4 0 2.7.4 3.8 1.1l-.4.4zm-5.5 1.4v4h4v-4h-4z"/></svg>
-            <svg class="tab-icon" id="tab-media" onclick="switchTab('media')" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+            <svg class="tab-icon active" id="tab-clock" onclick="switchView('clock')" viewBox="0 0 24 24"><path d="M12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2zm0 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16zm1 8h4v2h-6V7h2v5z"/></svg>
+            <svg class="tab-icon" id="tab-timer" onclick="switchView('timer')" viewBox="0 0 24 24"><path d="M6 2h12v2H6V2zm11.5 7.6l1.4-1.4L20.3 9.6l-1.4 1.4c.7 1.1 1.1 2.4 1.1 3.8 0 3.9-3.1 7-7 7s-7-3.1-7-7c0-1.4.4-2.7 1.1-3.8L5.7 9.6l1.4-1.4 1.4 1.4c1.1-.7 2.4-1.1 3.8-1.1 1.4 0 2.7.4 3.8 1.1l-.4.4zm-5.5 1.4v4h4v-4h-4z"/></svg>
+            <svg class="tab-icon" id="tab-video" onclick="toggleOverlay('video')" viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
+            <svg class="tab-icon" id="tab-audio" onclick="toggleOverlay('audio')" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
         </div>
 
         <div id="view-clock" class="view active">
@@ -91,35 +95,25 @@
             <div class="controls"><button class="btn-start" id="startBtn" onclick="toggleTimer()">Start</button><button onclick="resetTimer()">Reset</button></div>
         </div>
 
-        <div id="view-media" class="view">
-            <div class="selector-label">Visual Atmosphere</div>
-            <div class="dropdown-container">
-                <div class="dropdown-btn" id="video-btn" onclick="toggleDropdown('video-list')">
-                    <span id="video-selected-text">Off</span>
-                    <svg class="dropdown-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
-                </div>
-                <div class="dropdown-list" id="video-list">
-                    <div class="dropdown-item selected" onclick="selectVideo(null, 'Off')">Off</div>
-                    <div class="dropdown-item" onclick="selectVideo('cafe', 'Cafe')">Cafe</div>
-                    <div class="dropdown-item" onclick="selectVideo('shop', 'Shop')">Shop</div>
-                    <div class="dropdown-item" onclick="selectVideo('yard', 'Yard')">Yard</div>
-                    <div class="dropdown-item" onclick="selectVideo('cave', 'Cave')">Cave</div>
-                    <div class="dropdown-item" onclick="selectVideo('room', 'Room')">Room</div>
-                </div>
+        <div class="overlay" id="overlay-video">
+            <div class="overlay-title">Visual Atmosphere</div>
+            <div class="overlay-content">
+                <div class="list-item selected" onclick="selectVideo(null, this)">Off</div>
+                <div class="list-item" onclick="selectVideo('cafe', this)">Cafe</div>
+                <div class="list-item" onclick="selectVideo('shop', this)">Shop</div>
+                <div class="list-item" onclick="selectVideo('yard', this)">Yard</div>
+                <div class="list-item" onclick="selectVideo('cave', this)">Cave</div>
+                <div class="list-item" onclick="selectVideo('room', this)">Room</div>
             </div>
+        </div>
 
-            <div class="selector-label">Background Audio</div>
-            <div class="dropdown-container">
-                <div class="dropdown-btn" id="audio-btn" onclick="toggleDropdown('audio-list')">
-                    <span id="audio-selected-text">Off</span>
-                    <svg class="dropdown-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
-                </div>
-                <div class="dropdown-list" id="audio-list">
-                    <div class="dropdown-item selected" onclick="selectAudio(null, 'Off')">Off</div>
-                    <div class="dropdown-item" onclick="selectAudio('cafe', 'Rain')">Rain</div>
-                    <div class="dropdown-item" onclick="selectAudio('shop', 'Fire')">Fire</div>
-                    <div class="dropdown-item" onclick="selectAudio('yard', 'Lo-fi')">Lo-fi</div>
-                </div>
+        <div class="overlay" id="overlay-audio">
+            <div class="overlay-title">Background Audio</div>
+            <div class="overlay-content">
+                <div class="list-item selected" onclick="selectAudio(null, this)">Off</div>
+                <div class="list-item" onclick="selectAudio('cafe', this)">Rain</div>
+                <div class="list-item" onclick="selectAudio('shop', this)">Fire</div>
+                <div class="list-item" onclick="selectAudio('yard', this)">Lo-fi</div>
             </div>
         </div>
 
@@ -131,8 +125,102 @@
         const daysOfWeek = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
         const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
-        function switchTab(t){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.querySelectorAll('.tab-icon').forEach(i=>i.classList.remove('active'));document.getElementById('view-'+t).classList.add('active');document.getElementById('tab-'+t).classList.add('active')}
-        
+        // State Tracking
+        let activeView = 'clock';
+        let overlayOpen = null; // 'audio', 'video', or null
+        let activeVid = null;
+        let activeAud = null;
+
+        // --- NAVIGATION & UI STATE ---
+        function updateTabStates() {
+            // Views
+            document.getElementById('tab-clock').classList.toggle('active', activeView === 'clock');
+            document.getElementById('tab-timer').classList.toggle('active', activeView === 'timer');
+            
+            // Media (Активны если играет файл ИЛИ если открыто их меню)
+            const isAudioActive = (activeAud !== null) || (overlayOpen === 'audio');
+            const isVideoActive = (activeVid !== null) || (overlayOpen === 'video');
+            document.getElementById('tab-audio').classList.toggle('active', isAudioActive);
+            document.getElementById('tab-video').classList.toggle('active', isVideoActive);
+        }
+
+        function switchView(t) {
+            activeView = t;
+            overlayOpen = null; // Закрываем оверлеи при переключении основных вкладок
+            
+            // Смена экранов
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.getElementById('view-' + t).classList.add('active');
+            
+            // Прячем оверлеи
+            document.querySelectorAll('.overlay').forEach(o => o.classList.remove('show'));
+            
+            updateTabStates();
+        }
+
+        function toggleOverlay(type) {
+            if (overlayOpen === type) {
+                overlayOpen = null; // Закрыть, если кликнули по той же вкладке
+            } else {
+                overlayOpen = type; // Открыть новую
+            }
+            
+            document.getElementById('overlay-audio').classList.toggle('show', overlayOpen === 'audio');
+            document.getElementById('overlay-video').classList.toggle('show', overlayOpen === 'video');
+            
+            updateTabStates();
+        }
+
+        // --- MEDIA SELECTION ---
+        function selectVideo(k, element) {
+            if(activeVid) {
+                const prev = document.getElementById('vid-'+activeVid);
+                prev.pause();
+                prev.classList.remove('active');
+            }
+            
+            if(k !== null) {
+                const v = document.getElementById('vid-'+k);
+                v.play();
+                v.classList.add('active');
+                activeVid = k;
+            } else {
+                activeVid = null;
+            }
+
+            // Обновление стилей в списке
+            document.querySelectorAll('#overlay-video .list-item').forEach(el => el.classList.remove('selected'));
+            element.classList.add('selected');
+
+            // Автозакрытие
+            overlayOpen = null;
+            document.getElementById('overlay-video').classList.remove('show');
+            updateTabStates();
+        }
+
+        function selectAudio(k, element) {
+            if(activeAud) {
+                document.getElementById('aud-'+activeAud).pause();
+            }
+            
+            if(k !== null) {
+                document.getElementById('aud-'+k).play();
+                activeAud = k;
+            } else {
+                activeAud = null;
+            }
+
+            // Обновление стилей в списке
+            document.querySelectorAll('#overlay-audio .list-item').forEach(el => el.classList.remove('selected'));
+            element.classList.add('selected');
+
+            // Автозакрытие
+            overlayOpen = null;
+            document.getElementById('overlay-audio').classList.remove('show');
+            updateTabStates();
+        }
+
+        // --- CLOCK & QUOTES ---
         function updateTime(){
             const n=new Date();
             document.getElementById('time-text').textContent=n.toLocaleTimeString('en-GB');
@@ -144,71 +232,7 @@
         function setRandomQuote(){document.getElementById("quote").textContent=quotes[Math.floor(Math.random()*quotes.length)]}
         setInterval(setRandomQuote,60000); setRandomQuote();
         
-        let activeVid = null, activeAud = null;
-
-        function toggleDropdown(listId) {
-            const list = document.getElementById(listId);
-            const btn = list.previousElementSibling;
-            
-            document.querySelectorAll('.dropdown-list').forEach(el => {
-                if (el.id !== listId) {
-                    el.classList.remove('show');
-                    el.previousElementSibling.classList.remove('open');
-                }
-            });
-            
-            list.classList.toggle('show');
-            btn.classList.toggle('open');
-        }
-
-        window.onclick = function(event) {
-            if (!event.target.closest('.dropdown-container')) {
-                document.querySelectorAll('.dropdown-list').forEach(el => el.classList.remove('show'));
-                document.querySelectorAll('.dropdown-btn').forEach(btn => btn.classList.remove('open'));
-            }
-        }
-
-        function updateSelectionUI(listId, selectedTextId, selectedName, clickedItem) {
-            document.getElementById(selectedTextId).textContent = selectedName;
-            const list = document.getElementById(listId);
-            list.querySelectorAll('.dropdown-item').forEach(item => item.classList.remove('selected'));
-            clickedItem.classList.add('selected');
-            list.classList.remove('show');
-            list.previousElementSibling.classList.remove('open');
-        }
-
-        function selectVideo(k, name) {
-            updateSelectionUI('video-list', 'video-selected-text', name, event.target);
-            
-            if(activeVid) {
-                const prev = document.getElementById('vid-'+activeVid);
-                prev.pause();
-                prev.classList.remove('active');
-            }
-            if(k !== null) {
-                const v = document.getElementById('vid-'+k);
-                v.play();
-                v.classList.add('active');
-                activeVid = k;
-            } else {
-                activeVid = null;
-            }
-        }
-
-        function selectAudio(k, name) {
-            updateSelectionUI('audio-list', 'audio-selected-text', name, event.target);
-            
-            if(activeAud) {
-                document.getElementById('aud-'+activeAud).pause();
-            }
-            if(k !== null) {
-                document.getElementById('aud-'+k).play();
-                activeAud = k;
-            } else {
-                activeAud = null;
-            }
-        }
-        
+        // --- TIMER LOGIC ---
         let timer=null,totalS=0,remainS=0,running=false;
         const minI=document.getElementById('min'),secI=document.getElementById('sec'),startB=document.getElementById('startBtn'),bar=document.getElementById('bar'),sound=document.getElementById('finishSound'),mainW=document.getElementById('mainWidget');
 
@@ -273,6 +297,7 @@
         }
         
         loadState();
+        updateTabStates(); // Инициализация начального состояния вкладок
     </script>
 </body>
 </html>
