@@ -61,13 +61,14 @@
     <audio id="aud-cafe" src="audios/rain.m4a" loop preload="none"></audio>
     <audio id="aud-shop" src="audios/fire.m4a" loop preload="none"></audio>
     <audio id="aud-yard" src="audios/lofi.m4a" loop preload="none"></audio>
+    <audio id="aud-cave" src="audios/cave.m4a" loop preload="none"></audio>
     <audio id="finishSound" src="audios/notification.mp3" preload="none"></audio>
 
     <div class="widget" id="mainWidget">
         <div class="tabs">
             <svg class="tab-icon active" id="tab-clock" onclick="switchView('clock')" viewBox="0 0 24 24"><path d="M12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2zm0 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16zm1 8h4v2h-6V7h2v5z"/></svg>
             <svg class="tab-icon" id="tab-timer" onclick="switchView('timer')" viewBox="0 0 24 24"><path d="M6 2h12v2H6V2zm11.5 7.6l1.4-1.4L20.3 9.6l-1.4 1.4c.7 1.1 1.1 2.4 1.1 3.8 0 3.9-3.1 7-7 7s-7-3.1-7-7c0-1.4.4-2.7 1.1-3.8L5.7 9.6l1.4-1.4 1.4 1.4c1.1-.7 2.4-1.1 3.8-1.1 1.4 0 2.7.4 3.8 1.1l-.4.4zm-5.5 1.4v4h4v-4h-4z"/></svg>
-            <svg class="tab-icon" id="tab-video" onclick="toggleOverlay('video')" oncontextmenu="turnOffMedia(event, 'video')" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-10 11V9l6 3-6 3z"/></svg>
+            <svg class="tab-icon" id="tab-video" onclick="toggleOverlay('video')" oncontextmenu="turnOffMedia(event, 'video')" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
             <svg class="tab-icon" id="tab-audio" onclick="toggleOverlay('audio')" oncontextmenu="turnOffMedia(event, 'audio')" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
         </div>
 
@@ -87,7 +88,6 @@
         <div class="overlay" id="overlay-video">
             <div class="overlay-title">Visual Atmosphere</div>
             <div class="overlay-content">
-                <div class="list-item selected" onclick="selectVideo(null, this)">Off</div>
                 <div class="list-item" onclick="selectVideo('cafe', this)">Cafe</div>
                 <div class="list-item" onclick="selectVideo('shop', this)">Shop</div>
                 <div class="list-item" onclick="selectVideo('yard', this)">Yard</div>
@@ -99,10 +99,10 @@
         <div class="overlay" id="overlay-audio">
             <div class="overlay-title">Background Audio</div>
             <div class="overlay-content">
-                <div class="list-item selected" onclick="selectAudio(null, this)">Off</div>
                 <div class="list-item" onclick="selectAudio('cafe', this)">Rain</div>
                 <div class="list-item" onclick="selectAudio('shop', this)">Fire</div>
                 <div class="list-item" onclick="selectAudio('yard', this)">Lo-fi</div>
+                <div class="list-item" onclick="selectAudio('cave', this)">Cave</div>
             </div>
         </div>
 
@@ -153,16 +153,16 @@
                 prev.pause();
                 prev.classList.remove('active');
             }
+            document.querySelectorAll('#overlay-video .list-item').forEach(el => el.classList.remove('selected'));
             if(k !== null) {
                 const v = document.getElementById('vid-'+k);
                 v.play();
                 v.classList.add('active');
                 activeVid = k;
+                if(element) element.classList.add('selected');
             } else {
                 activeVid = null;
             }
-            document.querySelectorAll('#overlay-video .list-item').forEach(el => el.classList.remove('selected'));
-            element.classList.add('selected');
             overlayOpen = null;
             document.getElementById('overlay-video').classList.remove('show');
             updateTabStates();
@@ -172,14 +172,14 @@
             if(activeAud) {
                 document.getElementById('aud-'+activeAud).pause();
             }
+            document.querySelectorAll('#overlay-audio .list-item').forEach(el => el.classList.remove('selected'));
             if(k !== null) {
                 document.getElementById('aud-'+k).play();
                 activeAud = k;
+                if(element) element.classList.add('selected');
             } else {
                 activeAud = null;
             }
-            document.querySelectorAll('#overlay-audio .list-item').forEach(el => el.classList.remove('selected'));
-            element.classList.add('selected');
             overlayOpen = null;
             document.getElementById('overlay-audio').classList.remove('show');
             updateTabStates();
@@ -188,9 +188,9 @@
         function turnOffMedia(e, type) {
             e.preventDefault();
             if (type === 'video') {
-                selectVideo(null, document.querySelector('#overlay-video .list-item'));
+                selectVideo(null, null);
             } else if (type === 'audio') {
-                selectAudio(null, document.querySelector('#overlay-audio .list-item'));
+                selectAudio(null, null);
             }
         }
 
