@@ -48,6 +48,8 @@
         <video id="vid-cafe" class="bg-video" src="videos/cafe.mp4" loop muted playsinline></video>
         <video id="vid-shop" class="bg-video" src="videos/shop.mp4" loop muted playsinline></video>
         <video id="vid-yard" class="bg-video" src="videos/yard.mp4" loop muted playsinline></video>
+        <video id="vid-cave" class="bg-video" src="videos/cave.mp4" loop muted playsinline></video>
+        <video id="vid-room" class="bg-video" src="videos/room.mp4" loop muted playsinline></video>
     </div>
     <audio id="aud-cafe" src="audios/rain.m4a" loop></audio>
     <audio id="aud-shop" src="audios/fire.m4a" loop></audio>
@@ -76,9 +78,19 @@
 
         <div id="view-media" class="view">
             <div class="selector-label">Visual Atmosphere</div>
-            <div class="selector-group"><div class="selector-item" id="v-cafe" onclick="toggleVideo('cafe')">Cafe</div><div class="selector-item" id="v-shop" onclick="toggleVideo('shop')">Shop</div><div class="selector-item" id="v-yard" onclick="toggleVideo('yard')">Yard</div></div>
+            <div class="selector-group">
+                <div class="selector-item" id="v-cafe" onclick="toggleVideo('cafe')">Cafe</div>
+                <div class="selector-item" id="v-shop" onclick="toggleVideo('shop')">Shop</div>
+                <div class="selector-item" id="v-yard" onclick="toggleVideo('yard')">Yard</div>
+                <div class="selector-item" id="v-cave" onclick="toggleVideo('cave')">Cave</div>
+                <div class="selector-item" id="v-room" onclick="toggleVideo('room')">Room</div>
+            </div>
             <div class="selector-label">Background Audio</div>
-            <div class="selector-group"><div class="selector-item" id="a-cafe" onclick="toggleAudio('cafe')">Rain</div><div class="selector-item" id="a-shop" onclick="toggleAudio('shop')">Fire</div><div class="selector-item" id="a-yard" onclick="toggleAudio('yard')">Lo-fi</div></div>
+            <div class="selector-group">
+                <div class="selector-item" id="a-cafe" onclick="toggleAudio('cafe')">Rain</div>
+                <div class="selector-item" id="a-shop" onclick="toggleAudio('shop')">Fire</div>
+                <div class="selector-item" id="a-yard" onclick="toggleAudio('yard')">Lo-fi</div>
+            </div>
         </div>
 
         <div class="quote-container" id="quote"></div>
