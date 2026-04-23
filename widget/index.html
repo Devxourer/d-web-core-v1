@@ -19,18 +19,7 @@
         .view.active { display: flex; }
         .date-day { font-size: 22px; text-transform: uppercase; letter-spacing: 4px; font-weight: 500; margin-bottom: 6px; }
         .date-full { font-size: 16px; font-weight: 300; letter-spacing: 1px; margin-bottom: 25px; opacity: 0.9; }
-        .time-display { display: flex; justify-content: center; align-items: center; }
-        .time-text, .time-input, .time-separator { font-size: 60px; font-weight: 700; letter-spacing: 2px; line-height: 1; }
-        .time-text { margin-bottom: 10px; }
-        .time-input { background: transparent; border: none; color: white; font-family: inherit; width: 130px; text-align: center; outline: none; -webkit-tap-highlight-color: transparent; margin-bottom: 10px; }
-        .time-separator { color: white; width: 20px; text-align: center; transform: translateY(-3px); margin-bottom: 10px; }
-        .progress-container { width: 90%; height: 4px; background: rgba(255, 255, 255, 0.1); border-radius: 10px; margin-bottom: 15px; overflow: hidden; }
-        .progress-bar { height: 100%; background: #fff; width: 100%; transition: width 1s linear; }
-        .presets { display: flex; justify-content: center; gap: 12px; margin-bottom: 15px; width: 100%; }
-        .preset-btn { width: 34px; height: 34px; border-radius: 50%; border: 1px solid rgba(255, 255, 255, 0.15); background: rgba(255, 255, 255, 0.05); color: white; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; cursor: pointer; -webkit-tap-highlight-color: transparent; }
-        .controls { display: flex; justify-content: center; gap: 15px; }
-        button { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.1); color: white; padding: 10px 22px; border-radius: 14px; font-family: inherit; text-transform: uppercase; letter-spacing: 2px; font-size: 10px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
-        .btn-start { background: white; color: black; font-weight: 700; border: none; }
+        .time-text { font-size: 60px; font-weight: 700; letter-spacing: 2px; line-height: 1; margin-bottom: 10px; }
         .overlay { position: absolute; top: 65px; bottom: 110px; left: 20px; right: 20px; background: rgba(15, 15, 15, 0.85); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; z-index: 20; display: flex; flex-direction: column; overflow: hidden; opacity: 0; pointer-events: none; transform: scale(0.95); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .overlay.show { opacity: 1; pointer-events: auto; transform: scale(1); }
         .overlay-title { font-size: 10px; text-transform: uppercase; letter-spacing: 3px; opacity: 0.5; padding: 15px; text-align: center; border-bottom: 1px solid rgba(255, 255, 255, 0.05); flex-shrink: 0; }
@@ -42,10 +31,6 @@
         .overlay-content::-webkit-scrollbar-track { background: transparent; }
         .overlay-content::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 4px; }
         .quote-container { position: relative; z-index: 30; font-size: 17px; font-style: italic; margin-top: 10px; line-height: 1.6; padding-top: 15px; border-top: 1px solid rgba(255, 255, 255, 0.15); min-height: 45px; display: flex; align-items: center; justify-content: center; color: #fff; flex-shrink: 0; background: rgba(0,0,0,0.2); border-radius: 8px; padding: 15px; border: none; }
-        @keyframes finishPulse { 0%, 100% { box-shadow: 0 0 20px rgba(255,255,255,0.1); } 50% { box-shadow: 0 0 60px rgba(255,255,255,0.4); border-color: rgba(255,255,255,0.4); } }
-        .widget.pulse-active { animation: finishPulse 2s infinite; }
-        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-        input[type=number] { -moz-appearance: textfield; }
     </style>
 </head>
 <body>
@@ -59,12 +44,10 @@
     <audio id="aud-rain" src="audios/rain.m4a" loop preload="none"></audio>
     <audio id="aud-fire" src="audios/fire.m4a" loop preload="none"></audio>
     <audio id="aud-cave" src="audios/cave.m4a" loop preload="none"></audio>
-    <audio id="finishSound" src="audios/notification.mp3" preload="none"></audio>
 
     <div class="widget" id="mainWidget">
         <div class="tabs">
             <svg class="tab-icon active" id="tab-clock" onclick="switchView('clock')" viewBox="0 0 24 24"><path d="M12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2zm0 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16zm1 8h4v2h-6V7h2v5z"/></svg>
-            <svg class="tab-icon" id="tab-timer" onclick="switchView('timer')" viewBox="0 0 24 24"><path d="M6 2h12v2H6V2zm11.5 7.6l1.4-1.4L20.3 9.6l-1.4 1.4c.7 1.1 1.1 2.4 1.1 3.8 0 3.9-3.1 7-7 7s-7-3.1-7-7c0-1.4.4-2.7 1.1-3.8L5.7 9.6l1.4-1.4 1.4 1.4c1.1-.7 2.4-1.1 3.8-1.1 1.4 0 2.7.4 3.8 1.1l-.4.4zm-5.5 1.4v4h4v-4h-4z"/></svg>
             <svg class="tab-icon" id="tab-video" onclick="toggleOverlay('video')" oncontextmenu="turnOffMedia(event, 'video')" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-10 12V8l6 4-6 4z"/></svg>
             <svg class="tab-icon" id="tab-audio" onclick="toggleOverlay('audio')" oncontextmenu="turnOffMedia(event, 'audio')" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
         </div>
@@ -73,13 +56,6 @@
             <div class="date-day" id="date-day">SUNDAY</div>
             <div class="date-full" id="date-full">February 22, 2026</div>
             <div class="time-text" id="time-text">00:00:00</div>
-        </div>
-
-        <div id="view-timer" class="view">
-            <div class="time-display"><input type="number" id="min" class="time-input" value="60"><span class="time-separator">:</span><input type="number" id="sec" class="time-input" value="00"></div>
-            <div class="progress-container"><div id="bar" class="progress-bar"></div></div>
-            <div class="presets"><div class="preset-btn" onclick="setPreset(1)">1</div><div class="preset-btn" onclick="setPreset(3)">3</div><div class="preset-btn" onclick="setPreset(5)">5</div><div class="preset-btn" onclick="setPreset(15)">15</div><div class="preset-btn" onclick="setPreset(30)">30</div><div class="preset-btn" onclick="setPreset(60)">60</div></div>
-            <div class="controls"><button class="btn-start" id="startBtn" onclick="toggleTimer()">Start</button><button onclick="resetTimer()">Reset</button></div>
         </div>
 
         <div class="overlay" id="overlay-video">
@@ -114,7 +90,6 @@
 
         function updateTabStates() {
             document.getElementById('tab-clock').classList.toggle('active', activeView === 'clock');
-            document.getElementById('tab-timer').classList.toggle('active', activeView === 'timer');
             const isAudioActive = (activeAud !== null) || (overlayOpen === 'audio');
             const isVideoActive = (activeVid !== null) || (overlayOpen === 'video');
             document.getElementById('tab-audio').classList.toggle('active', isAudioActive);
@@ -201,70 +176,6 @@
         function setRandomQuote(){document.getElementById("quote").textContent=quotes[Math.floor(Math.random()*quotes.length)]}
         setInterval(setRandomQuote,60000); setRandomQuote();
         
-        let timer=null,totalS=0,remainS=0,running=false;
-        const minI=document.getElementById('min'),secI=document.getElementById('sec'),startB=document.getElementById('startBtn'),bar=document.getElementById('bar'),sound=document.getElementById('finishSound'),mainW=document.getElementById('mainWidget');
-
-        function saveState() {
-            const state = { remainS, totalS, running, ts: Date.now() };
-            localStorage.setItem('timer_state', JSON.stringify(state));
-        }
-
-        function updateUI() {
-            if (remainS < 0) remainS = 0;
-            minI.value = String(Math.floor(remainS / 60)).padStart(2, '0');
-            secI.value = String(remainS % 60).padStart(2, '0');
-            bar.style.width = totalS > 0 ? (remainS / totalS * 100) + '%' : '100%';
-        }
-
-        function loadState() {
-            const saved = localStorage.getItem('timer_state');
-            if (!saved) return;
-            const state = JSON.parse(saved);
-            totalS = state.totalS;
-            if (state.running) {
-                const passed = Math.floor((Date.now() - state.ts) / 1000);
-                remainS = state.remainS - passed;
-                if (remainS > 0) startLogic();
-                else resetTimer(true);
-            } else {
-                remainS = state.remainS;
-                updateUI();
-            }
-        }
-
-        function setPreset(m){resetTimer();minI.value=String(m).padStart(2,'0');secI.value="00";saveState();}
-
-        function startLogic() {
-            running = true;
-            startB.textContent = 'Pause';
-            timer = setInterval(() => {
-                remainS--; updateUI(); saveState();
-                if (remainS <= 0) {
-                    clearInterval(timer); sound.play(); mainW.classList.add('pulse-active'); resetTimer(true);
-                }
-            }, 1000);
-        }
-
-        function toggleTimer() {
-            mainW.classList.remove('pulse-active');
-            if (running) {
-                clearInterval(timer); startB.textContent = 'Start'; running = false; saveState();
-            } else {
-                if (remainS <= 0) {
-                    remainS = (parseInt(minI.value) || 0) * 60 + (parseInt(secI.value) || 0);
-                    totalS = remainS;
-                }
-                if (remainS > 0) startLogic();
-            }
-        }
-
-        function resetTimer(auto=false) {
-            clearInterval(timer); running = false; remainS = 0; totalS = 0; startB.textContent = 'Start'; bar.style.width = '100%';
-            if (!auto) { minI.value = "60"; secI.value = "00"; mainW.classList.remove('pulse-active'); }
-            localStorage.removeItem('timer_state');
-        }
-        
-        loadState();
         updateTabStates(); 
 
         window.addEventListener('click', function(e) {
