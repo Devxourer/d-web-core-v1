@@ -32,8 +32,10 @@
         .overlay-content::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 4px; }
         .quote-container { position: relative; z-index: 30; font-size: 17px; font-style: italic; margin-top: 10px; line-height: 1.6; padding-top: 15px; border-top: 1px solid rgba(255, 255, 255, 0.15); min-height: 45px; display: flex; align-items: center; justify-content: center; color: #fff; flex-shrink: 0; background: rgba(0,0,0,0.2); border-radius: 8px; padding: 15px; border: none; }
         
-        .top-right-container { position: fixed; top: 30px; right: 30px; z-index: 100; display: flex; flex-direction: column; align-items: flex-end; }
-        .top-right-container .overlay { position: absolute; top: 40px; right: 0; left: auto; width: 180px; transform-origin: top right; }
+        .left-container { position: fixed; top: 30px; left: 30px; z-index: 100; display: flex; flex-direction: column; gap: 24px; align-items: center; }
+        .left-container .tab-icon { opacity: 0.4; width: 24px; height: 24px; }
+        .left-container .tab-icon.active { opacity: 1; }
+        .left-container .tab-icon:hover { opacity: 0.8; }
     </style>
 </head>
 <body>
@@ -50,19 +52,12 @@
     <audio id="aud-chill" src="audios/chill.m4a" loop preload="none"></audio>
     <audio id="aud-storm" src="audios/storm.m4a" loop preload="none"></audio>
 
-    <div class="top-right-container">
-        <svg class="tab-icon" id="tab-audio" onclick="toggleOverlay('audio')" oncontextmenu="turnOffMedia(event, 'audio')" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
-
-        <div class="overlay" id="overlay-audio">
-            <div class="overlay-title">Background Audio</div>
-            <div class="overlay-content">
-                <div class="list-item" onclick="selectAudio('rain', this)">Rain</div>
-                <div class="list-item" onclick="selectAudio('fire', this)">Fire</div>
-                <div class="list-item" onclick="selectAudio('cave', this)">Cave</div>
-                <div class="list-item" onclick="selectAudio('chill', this)">Chill</div>
-                <div class="list-item" onclick="selectAudio('storm', this)">Storm</div>
-            </div>
-        </div>
+    <div class="left-container">
+        <svg class="tab-icon" id="icon-rain" onclick="toggleAudio(event, 'rain')" oncontextmenu="toggleAudio(event, 'rain')" viewBox="0 0 24 24"><path d="M12 2c-5.33 4.55-8 8.48-8 11.8a8 8 0 0 0 16 0c0-3.32-2.67-7.25-8-11.8z"/></svg>
+        <svg class="tab-icon" id="icon-fire" onclick="toggleAudio(event, 'fire')" oncontextmenu="toggleAudio(event, 'fire')" viewBox="0 0 24 24"><path d="M17.5 11.5c-1.5-2-4-5.5-4-8.5 0-.54-.64-.85-1.07-.54-2.89 2.05-6.43 6.64-6.43 11.04 0 3.31 2.69 6 6 6 3.31 0 6-2.69 6-6 0-1.05-.31-2.05-.85-2.92l-.65-.92c-.22-.31-.69-.31-.91 0l-.59.84z"/></svg>
+        <svg class="tab-icon" id="icon-cave" onclick="toggleAudio(event, 'cave')" oncontextmenu="toggleAudio(event, 'cave')" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12v10h20V12c0-5.52-4.48-10-10-10zm0 2c4.42 0 8 3.58 8 8v8H4v-8c0-4.42 3.58-8 8-8zm-2 2v4l2 2 2-2V6h-4z"/></svg>
+        <svg class="tab-icon" id="icon-chill" onclick="toggleAudio(event, 'chill')" oncontextmenu="toggleAudio(event, 'chill')" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+        <svg class="tab-icon" id="icon-storm" onclick="toggleAudio(event, 'storm')" oncontextmenu="toggleAudio(event, 'storm')" viewBox="0 0 24 24"><path d="M11 21h-1l1-7H7.5c-.58 0-.57-.32-.38-.66.36-.67 1.96-3.46 4.88-8.34h1l-1 7h3.5c.49 0 .56.33.47.51l-.07.15C12.96 17.55 11 21 11 21z"/></svg>
     </div>
 
     <!--
@@ -107,18 +102,37 @@
         const quotes = ["The future belongs to those who believe in the beauty of their dreams.", "Strive not to be a success, but rather to be of value.", "Every moment is a fresh beginning.", "Believe you can and you're halfway there.", "The only way to do great work is to love what you do.", "The best way to predict the future is to create it.", "The best preparation for tomorrow is doing your best today.", "The only limit to our realization of tomorrow will be our doubts of today.", "Action is the foundational key to all success.", "Discipline is the bridge between goals and accomplishment."];
         const daysOfWeek = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
         const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        
         let activeView = 'clock';
         let overlayOpen = null;
         let activeVid = null;
         let activeAud = null;
 
+        function toggleAudio(e, id) {
+            if (e) e.preventDefault();
+            const aud = document.getElementById('aud-' + id);
+            const icon = document.getElementById('icon-' + id);
+
+            if (activeAud === id) {
+                aud.pause();
+                icon.classList.remove('active');
+                activeAud = null;
+            } else {
+                if (activeAud) {
+                    document.getElementById('aud-' + activeAud).pause();
+                    document.getElementById('icon-' + activeAud).classList.remove('active');
+                }
+                aud.play();
+                icon.classList.add('active');
+                activeAud = id;
+            }
+        }
+
+        // Functions for the commented-out widget logic (kept intact with null checks to avoid errors)
         function updateTabStates() {
             const tClock = document.getElementById('tab-clock');
             if (tClock) tClock.classList.toggle('active', activeView === 'clock');
-            const isAudioActive = (activeAud !== null) || (overlayOpen === 'audio');
             const isVideoActive = (activeVid !== null) || (overlayOpen === 'video');
-            const tAudio = document.getElementById('tab-audio');
-            if (tAudio) tAudio.classList.toggle('active', isAudioActive);
             const tVideo = document.getElementById('tab-video');
             if (tVideo) tVideo.classList.toggle('active', isVideoActive);
         }
@@ -139,8 +153,6 @@
             } else {
                 overlayOpen = type;
             }
-            const oAudio = document.getElementById('overlay-audio');
-            if (oAudio) oAudio.classList.toggle('show', overlayOpen === 'audio');
             const oVideo = document.getElementById('overlay-video');
             if (oVideo) oVideo.classList.toggle('show', overlayOpen === 'video');
             updateTabStates();
@@ -169,31 +181,10 @@
             updateTabStates();
         }
 
-        function selectAudio(k, element) {
-            const isSame = (activeAud === k);
-            if(activeAud) {
-                document.getElementById('aud-'+activeAud).pause();
-            }
-            document.querySelectorAll('#overlay-audio .list-item').forEach(el => el.classList.remove('selected'));
-            if(k !== null && !isSame) {
-                document.getElementById('aud-'+k).play();
-                activeAud = k;
-                if(element) element.classList.add('selected');
-            } else {
-                activeAud = null;
-            }
-            overlayOpen = null;
-            const oAudio = document.getElementById('overlay-audio');
-            if (oAudio) oAudio.classList.remove('show');
-            updateTabStates();
-        }
-
         function turnOffMedia(e, type) {
             e.preventDefault();
             if (type === 'video') {
                 selectVideo(null, null);
-            } else if (type === 'audio') {
-                selectAudio(null, null);
             }
         }
 
@@ -217,7 +208,7 @@
         updateTabStates(); 
 
         window.addEventListener('click', function(e) {
-            if (overlayOpen && !e.target.closest('.overlay') && !e.target.closest('#tab-video') && !e.target.closest('#tab-audio')) {
+            if (overlayOpen && !e.target.closest('.overlay') && !e.target.closest('#tab-video')) {
                 overlayOpen = null;
                 document.querySelectorAll('.overlay').forEach(o => o.classList.remove('show'));
                 updateTabStates();
