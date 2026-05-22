@@ -18,9 +18,11 @@
         .tab-icon.active { opacity: 1; filter: drop-shadow(0 0 8px white); }
         .view { display: none; margin: 25px 0 15px 0; flex-direction: column; align-items: center; justify-content: center; width: 100%; overflow: hidden; }
         .view.active { display: flex; }
-        .date-day { font-size: 22px; text-transform: uppercase; letter-spacing: 4px; font-weight: 500; margin-bottom: 6px; }
-        .date-full { font-size: 16px; font-weight: 300; letter-spacing: 1px; margin-bottom: 25px; opacity: 0.9; }
-        .time-text { font-size: 60px; font-weight: 700; letter-spacing: 2px; line-height: 1; margin-bottom: 10px; }
+        
+        .date-day { font-size: 14px; text-transform: uppercase; letter-spacing: 3px; font-weight: 500; margin-bottom: 2px; color: white; }
+        .date-full { font-size: 12px; font-weight: 300; letter-spacing: 1px; margin-bottom: 8px; opacity: 0.9; color: white; }
+        .time-text { font-size: 42px; font-weight: 700; letter-spacing: 2px; line-height: 1; margin-bottom: 0; color: white; }
+        
         .overlay { position: absolute; top: 65px; left: 20px; right: 20px; background: rgba(15, 15, 15, 0.85); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; z-index: 20; display: flex; flex-direction: column; overflow: hidden; opacity: 0; pointer-events: none; transform: scale(0.95); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .overlay.show { opacity: 1; pointer-events: auto; transform: scale(1); }
         .overlay-title { font-size: 10px; text-transform: uppercase; letter-spacing: 3px; opacity: 0.5; padding: 15px; text-align: center; border-bottom: 1px solid rgba(255, 255, 255, 0.05); flex-shrink: 0; }
@@ -40,33 +42,16 @@
             transform: translateX(-50%);
             z-index: 100;
             display: flex;
-            flex-direction: row;
-            gap: 16px;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            background: rgba(0, 0, 0, 0.04);
-            -webkit-backdrop-filter: blur(3px);
-            backdrop-filter: blur(3px);
-            border: 1px solid rgba(255, 255, 255, 0.04);
+            background: rgba(0, 0, 0, 0.2);
+            -webkit-backdrop-filter: blur(5px);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 12px;
-            padding: 10px 18px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-        }
-        .top-center-container .tab-icon {
-            width: 17px;
-            height: 17px;
-            opacity: 0.35;
-            fill: white;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: block;
-        }
-        .top-center-container .tab-icon.active {
-            opacity: 1;
-            filter: drop-shadow(0 0 8px rgba(255,255,255,0.8));
-        }
-        .top-center-container .tab-icon:hover {
-            opacity: 0.8;
+            padding: 15px 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
     </style>
 </head>
@@ -85,50 +70,10 @@
     <audio id="aud-storm" src="audios/storm.m4a" loop preload="none"></audio>
 
     <div class="top-center-container">
-        <svg class="tab-icon" id="icon-rain" onclick="toggleAudio(event, 'rain')" oncontextmenu="toggleAudio(event, 'rain')" viewBox="0 0 24 24"><path d="M12,4c-4.4,3.8-6.6,7-6.6,9.8c0,2.8,2.2,5.2,6.6,5.2s6.6-2.4,6.6-5.2C18.6,11,16.4,7.8,12,4z"/></svg>
-        <svg class="tab-icon" id="icon-fire" onclick="toggleAudio(event, 'fire')" oncontextmenu="toggleAudio(event, 'fire')" viewBox="0 0 24 24"><path d="M12.75,19.07L16,17.19l1.19,2.06l-3.25,1.88L12.75,19.07z M8,17.19l3.25,1.88l-1.19,2.06L6.81,19.25L8,17.19z M12.5,1.15 c0,0-4.5,4.71-4.5,9.52c0,1.76,0.59,3.38,1.58,4.68l2.12-1.22c-0.45-0.67-0.7-1.46-0.7-2.3c0-2.26,2-4.14,2-4.14 s2,1.88,2,4.14c0,0.84-0.26,1.63-0.7,2.3l2.12,1.22c0.99-1.29,1.58-2.92,1.58-4.68C18,5.87,13.5,1.15,12.5,1.15z"/></svg>
-        <svg class="tab-icon" id="icon-cave" onclick="toggleAudio(event, 'cave')" oncontextmenu="toggleAudio(event, 'cave')" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M12 4C7.58 4 4 7.58 4 12v8h16v-8c0-4.42-3.58-8-8-8zm3 16h-6v-6c0-1.66 1.34-3 3-3s3 1.34 3 3v6z" clip-rule="evenodd"/></svg>
-        <svg class="tab-icon" id="icon-chill" onclick="toggleAudio(event, 'chill')" oncontextmenu="toggleAudio(event, 'chill')" viewBox="0 0 24 24"><path d="M14 4v9.5c-.6-.3-1.3-.5-2-.5-2.2 0-4 1.8-4 4s1.8 4 4 4 4-1.8 4-4V8h4V4h-6z"/></svg>
-        <svg class="tab-icon" id="icon-storm" onclick="toggleAudio(event, 'storm')" oncontextmenu="toggleAudio(event, 'storm')" viewBox="0 0 24 24"><path d="M17.9 7C17.5 4.2 15 2 12 2 9.8 2 7.8 3.2 6.8 5.1 4.1 5.4 2 7.7 2 10.5 2 13.5 4.5 16 7.5 16h3.7l-1 3h-2l-2 5 6-7h-2.1l1.6-5H18c2.8 0 5-2.2 5-5 0-2.6-2.1-4.8-4.6-5z"/></svg>
+        <div class="date-day" id="date-day">SUNDAY</div>
+        <div class="date-full" id="date-full">February 22, 2026</div>
+        <div class="time-text" id="time-text">00:00:00</div>
     </div>
-
-    <!--
-    <div class="widget" id="mainWidget">
-        <div class="tabs">
-            <svg class="tab-icon active" id="tab-clock" onclick="switchView('clock')" viewBox="0 0 24 24"><path d="M12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2zm0 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16zm1 8h4v2h-6V7h2v5z"/></svg>
-            <svg class="tab-icon" id="tab-video" onclick="toggleOverlay('video')" oncontextmenu="turnOffMedia(event, 'video')" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-10 12V8l6 4-6 4z"/></svg>
-            <svg class="tab-icon" id="tab-audio" onclick="toggleOverlay('audio')" oncontextmenu="turnOffMedia(event, 'audio')" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
-        </div>
-
-        <div id="view-clock" class="view active">
-            <div class="date-day" id="date-day">SUNDAY</div>
-            <div class="date-full" id="date-full">February 22, 2026</div>
-            <div class="time-text" id="time-text">00:00:00</div>
-        </div>
-
-        <div class="overlay" id="overlay-video">
-            <div class="overlay-title">Visual Atmosphere</div>
-            <div class="overlay-content">
-                <div class="list-item" onclick="selectVideo('cafe', this)">Cafe</div>
-                <div class="list-item" onclick="selectVideo('shop', this)">Shop</div>
-                <div class="list-item" onclick="selectVideo('yard', this)">Yard</div>
-            </div>
-        </div>
-
-        <div class="overlay" id="overlay-audio">
-            <div class="overlay-title">Background Audio</div>
-            <div class="overlay-content">
-                <div class="list-item" onclick="selectAudio('rain', this)">Rain</div>
-                <div class="list-item" onclick="selectAudio('fire', this)">Fire</div>
-                <div class="list-item" onclick="selectAudio('cave', this)">Cave</div>
-                <div class="list-item" onclick="selectAudio('chill', this)">Chill</div>
-                <div class="list-item" onclick="selectAudio('storm', this)">Storm</div>
-            </div>
-        </div>
-
-        <div class="quote-container" id="quote"></div>
-    </div>
-    -->
 
     <script>
         const quotes = ["The future belongs to those who believe in the beauty of their dreams.", "Strive not to be a success, but rather to be of value.", "Every moment is a fresh beginning.", "Believe you can and you're halfway there.", "The only way to do great work is to love what you do.", "The best way to predict the future is to create it.", "The best preparation for tomorrow is doing your best today.", "The only limit to our realization of tomorrow will be our doubts of today.", "Action is the foundational key to all success.", "Discipline is the bridge between goals and accomplishment."];
@@ -147,15 +92,16 @@
 
             if (activeAud === id) {
                 aud.pause();
-                icon.classList.remove('active');
+                if(icon) icon.classList.remove('active');
                 activeAud = null;
             } else {
                 if (activeAud) {
                     document.getElementById('aud-' + activeAud).pause();
-                    document.getElementById('icon-' + activeAud).classList.remove('active');
+                    const oldIcon = document.getElementById('icon-' + activeAud);
+                    if(oldIcon) oldIcon.classList.remove('active');
                 }
                 aud.play();
-                icon.classList.add('active');
+                if(icon) icon.classList.add('active');
                 activeAud = id;
             }
         }
