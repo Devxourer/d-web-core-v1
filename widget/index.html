@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -32,6 +31,9 @@
         .overlay-content::-webkit-scrollbar-track { background: transparent; }
         .overlay-content::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 4px; }
         .quote-container { position: relative; z-index: 30; font-size: 17px; font-style: italic; margin-top: 10px; line-height: 1.6; padding-top: 15px; border-top: 1px solid rgba(255, 255, 255, 0.15); min-height: 45px; display: flex; align-items: center; justify-content: center; color: #fff; flex-shrink: 0; background: rgba(0,0,0,0.2); border-radius: 8px; padding: 15px; border: none; }
+        
+        .top-right-container { position: fixed; top: 30px; right: 30px; z-index: 100; display: flex; flex-direction: column; align-items: flex-end; }
+        .top-right-container .overlay { position: absolute; top: 40px; right: 0; left: auto; width: 180px; transform-origin: top right; }
     </style>
 </head>
 <body>
@@ -48,6 +50,22 @@
     <audio id="aud-chill" src="audios/chill.m4a" loop preload="none"></audio>
     <audio id="aud-storm" src="audios/storm.m4a" loop preload="none"></audio>
 
+    <div class="top-right-container">
+        <svg class="tab-icon" id="tab-audio" onclick="toggleOverlay('audio')" oncontextmenu="turnOffMedia(event, 'audio')" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+
+        <div class="overlay" id="overlay-audio">
+            <div class="overlay-title">Background Audio</div>
+            <div class="overlay-content">
+                <div class="list-item" onclick="selectAudio('rain', this)">Rain</div>
+                <div class="list-item" onclick="selectAudio('fire', this)">Fire</div>
+                <div class="list-item" onclick="selectAudio('cave', this)">Cave</div>
+                <div class="list-item" onclick="selectAudio('chill', this)">Chill</div>
+                <div class="list-item" onclick="selectAudio('storm', this)">Storm</div>
+            </div>
+        </div>
+    </div>
+
+    <!--
     <div class="widget" id="mainWidget">
         <div class="tabs">
             <svg class="tab-icon active" id="tab-clock" onclick="switchView('clock')" viewBox="0 0 24 24"><path d="M12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2zm0 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16zm1 8h4v2h-6V7h2v5z"/></svg>
@@ -83,6 +101,7 @@
 
         <div class="quote-container" id="quote"></div>
     </div>
+    -->
 
     <script>
         const quotes = ["The future belongs to those who believe in the beauty of their dreams.", "Strive not to be a success, but rather to be of value.", "Every moment is a fresh beginning.", "Believe you can and you're halfway there.", "The only way to do great work is to love what you do.", "The best way to predict the future is to create it.", "The best preparation for tomorrow is doing your best today.", "The only limit to our realization of tomorrow will be our doubts of today.", "Action is the foundational key to all success.", "Discipline is the bridge between goals and accomplishment."];
@@ -94,18 +113,22 @@
         let activeAud = null;
 
         function updateTabStates() {
-            document.getElementById('tab-clock').classList.toggle('active', activeView === 'clock');
+            const tClock = document.getElementById('tab-clock');
+            if (tClock) tClock.classList.toggle('active', activeView === 'clock');
             const isAudioActive = (activeAud !== null) || (overlayOpen === 'audio');
             const isVideoActive = (activeVid !== null) || (overlayOpen === 'video');
-            document.getElementById('tab-audio').classList.toggle('active', isAudioActive);
-            document.getElementById('tab-video').classList.toggle('active', isVideoActive);
+            const tAudio = document.getElementById('tab-audio');
+            if (tAudio) tAudio.classList.toggle('active', isAudioActive);
+            const tVideo = document.getElementById('tab-video');
+            if (tVideo) tVideo.classList.toggle('active', isVideoActive);
         }
 
         function switchView(t) {
             activeView = t;
             overlayOpen = null;
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-            document.getElementById('view-' + t).classList.add('active');
+            const viewT = document.getElementById('view-' + t);
+            if (viewT) viewT.classList.add('active');
             document.querySelectorAll('.overlay').forEach(o => o.classList.remove('show'));
             updateTabStates();
         }
@@ -116,8 +139,10 @@
             } else {
                 overlayOpen = type;
             }
-            document.getElementById('overlay-audio').classList.toggle('show', overlayOpen === 'audio');
-            document.getElementById('overlay-video').classList.toggle('show', overlayOpen === 'video');
+            const oAudio = document.getElementById('overlay-audio');
+            if (oAudio) oAudio.classList.toggle('show', overlayOpen === 'audio');
+            const oVideo = document.getElementById('overlay-video');
+            if (oVideo) oVideo.classList.toggle('show', overlayOpen === 'video');
             updateTabStates();
         }
 
@@ -139,7 +164,8 @@
                 activeVid = null;
             }
             overlayOpen = null;
-            document.getElementById('overlay-video').classList.remove('show');
+            const oVideo = document.getElementById('overlay-video');
+            if (oVideo) oVideo.classList.remove('show');
             updateTabStates();
         }
 
@@ -157,7 +183,8 @@
                 activeAud = null;
             }
             overlayOpen = null;
-            document.getElementById('overlay-audio').classList.remove('show');
+            const oAudio = document.getElementById('overlay-audio');
+            if (oAudio) oAudio.classList.remove('show');
             updateTabStates();
         }
 
@@ -172,13 +199,19 @@
 
         function updateTime(){
             const n=new Date();
-            document.getElementById('time-text').textContent=n.toLocaleTimeString('en-GB');
-            document.getElementById('date-day').textContent = daysOfWeek[n.getDay()];
-            document.getElementById('date-full').textContent = monthNames[n.getMonth()] + " " + n.getDate() + ", " + n.getFullYear();
+            const tt = document.getElementById('time-text');
+            if (tt) tt.textContent=n.toLocaleTimeString('en-GB');
+            const dd = document.getElementById('date-day');
+            if (dd) dd.textContent = daysOfWeek[n.getDay()];
+            const df = document.getElementById('date-full');
+            if (df) df.textContent = monthNames[n.getMonth()] + " " + n.getDate() + ", " + n.getFullYear();
         }
         setInterval(updateTime,1000); updateTime();
         
-        function setRandomQuote(){document.getElementById("quote").textContent=quotes[Math.floor(Math.random()*quotes.length)]}
+        function setRandomQuote(){
+            const q = document.getElementById("quote");
+            if (q) q.textContent=quotes[Math.floor(Math.random()*quotes.length)];
+        }
         setInterval(setRandomQuote,60000); setRandomQuote();
         
         updateTabStates(); 
@@ -193,5 +226,3 @@
     </script>
 </body>
 </html>
-
-```
