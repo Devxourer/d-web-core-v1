@@ -35,27 +35,27 @@
         
         .top-center-container {
             position: fixed;
-            top: 30px;
+            top: 25px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 100;
             display: flex;
             flex-direction: row;
-            gap: 20px;
+            gap: 16px;
             align-items: center;
             justify-content: center;
-            background: rgba(0, 0, 0, 0.2);
-            -webkit-backdrop-filter: blur(8px);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.04);
+            -webkit-backdrop-filter: blur(3px);
+            backdrop-filter: blur(3px);
+            border: 1px solid rgba(255, 255, 255, 0.04);
             border-radius: 12px;
-            padding: 12px 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            padding: 10px 18px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
         }
         .top-center-container .tab-icon {
-            width: 24px;
-            height: 24px;
-            opacity: 0.4;
+            width: 17px;
+            height: 17px;
+            opacity: 0.35;
             fill: white;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -63,7 +63,7 @@
         }
         .top-center-container .tab-icon.active {
             opacity: 1;
-            filter: drop-shadow(0 0 8px white);
+            filter: drop-shadow(0 0 8px rgba(255,255,255,0.8));
         }
         .top-center-container .tab-icon:hover {
             opacity: 0.8;
@@ -85,11 +85,11 @@
     <audio id="aud-storm" src="audios/storm.m4a" loop preload="none"></audio>
 
     <div class="top-center-container">
-        <svg class="tab-icon" id="icon-rain" onclick="toggleAudio(event, 'rain')" oncontextmenu="toggleAudio(event, 'rain')" viewBox="0 0 24 24"><path d="M12 2c-5.33 4.55-8 8.48-8 11.8a8 8 0 0 0 16 0c0-3.32-2.67-7.25-8-11.8z"/></svg>
-        <svg class="tab-icon" id="icon-fire" onclick="toggleAudio(event, 'fire')" oncontextmenu="toggleAudio(event, 'fire')" viewBox="0 0 24 24"><path d="M12,15c-1.65,0-3-1.35-3-3c0-1.65,3-5,3-5s3,3.35,3,5C15,13.65,13.65,15,12,15z M12,2c0,0-5,5.5-5,10c0,2.76,2.24,5,5,5s5-2.24,5-5C17,7.5,12,2,12,2z M19.38,20.06l1.24-1.24l-4.24-4.24l-1.24,1.24L19.38,20.06z M4.62,20.06l4.24-4.24l-1.24-1.24l-4.24,4.24L4.62,20.06z"/></svg>
-        <svg class="tab-icon" id="icon-cave" onclick="toggleAudio(event, 'cave')" oncontextmenu="toggleAudio(event, 'cave')" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M12 2C18.5 2 22 8.5 22 22H2C2 8.5 5.5 2 12 2Zm4 20v-5c0-2.21-1.79-4-4-4s-4 1.79-4 4v5h8Z"/></svg>
-        <svg class="tab-icon" id="icon-chill" onclick="toggleAudio(event, 'chill')" oncontextmenu="toggleAudio(event, 'chill')" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
-        <svg class="tab-icon" id="icon-storm" onclick="toggleAudio(event, 'storm')" oncontextmenu="toggleAudio(event, 'storm')" viewBox="0 0 24 24"><path d="M11 21h-1l1-7H7.5c-.58 0-.57-.32-.38-.66.36-.67 1.96-3.46 4.88-8.34h1l-1 7h3.5c.49 0 .56.33.47.51l-.07.15C12.96 17.55 11 21 11 21z"/></svg>
+        <svg class="tab-icon" id="icon-rain" onclick="toggleAudio(event, 'rain')" oncontextmenu="toggleAudio(event, 'rain')" viewBox="0 0 24 24"><path d="M12,4c-4.4,3.8-6.6,7-6.6,9.8c0,2.8,2.2,5.2,6.6,5.2s6.6-2.4,6.6-5.2C18.6,11,16.4,7.8,12,4z"/></svg>
+        <svg class="tab-icon" id="icon-fire" onclick="toggleAudio(event, 'fire')" oncontextmenu="toggleAudio(event, 'fire')" viewBox="0 0 24 24"><path d="M12.75,19.07L16,17.19l1.19,2.06l-3.25,1.88L12.75,19.07z M8,17.19l3.25,1.88l-1.19,2.06L6.81,19.25L8,17.19z M12.5,1.15 c0,0-4.5,4.71-4.5,9.52c0,1.76,0.59,3.38,1.58,4.68l2.12-1.22c-0.45-0.67-0.7-1.46-0.7-2.3c0-2.26,2-4.14,2-4.14 s2,1.88,2,4.14c0,0.84-0.26,1.63-0.7,2.3l2.12,1.22c0.99-1.29,1.58-2.92,1.58-4.68C18,5.87,13.5,1.15,12.5,1.15z"/></svg>
+        <svg class="tab-icon" id="icon-cave" onclick="toggleAudio(event, 'cave')" oncontextmenu="toggleAudio(event, 'cave')" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M12 4C7.58 4 4 7.58 4 12v8h16v-8c0-4.42-3.58-8-8-8zm3 16h-6v-6c0-1.66 1.34-3 3-3s3 1.34 3 3v6z" clip-rule="evenodd"/></svg>
+        <svg class="tab-icon" id="icon-chill" onclick="toggleAudio(event, 'chill')" oncontextmenu="toggleAudio(event, 'chill')" viewBox="0 0 24 24"><path d="M14 4v9.5c-.6-.3-1.3-.5-2-.5-2.2 0-4 1.8-4 4s1.8 4 4 4 4-1.8 4-4V8h4V4h-6z"/></svg>
+        <svg class="tab-icon" id="icon-storm" onclick="toggleAudio(event, 'storm')" oncontextmenu="toggleAudio(event, 'storm')" viewBox="0 0 24 24"><path d="M17.9 7C17.5 4.2 15 2 12 2 9.8 2 7.8 3.2 6.8 5.1 4.1 5.4 2 7.7 2 10.5 2 13.5 4.5 16 7.5 16h3.7l-1 3h-2l-2 5 6-7h-2.1l1.6-5H18c2.8 0 5-2.2 5-5 0-2.6-2.1-4.8-4.6-5z"/></svg>
     </div>
 
     <!--
